@@ -1,4 +1,5 @@
-#Nimbus Validator App
+# Nimbus Validator App
+
 Allows us to review and quality control the `QuestionAnswerPairs` in the database and make them available the live Nimbus model.
 
 ## Available Scripts
