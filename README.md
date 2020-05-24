@@ -1,4 +1,5 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#Nimbus Validator App
+Allows us to review and quality control the `QuestionAnswerPairs` in the database and make them available the live Nimbus model.
 
 ## Available Scripts
 
