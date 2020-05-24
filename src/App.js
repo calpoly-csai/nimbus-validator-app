@@ -1,24 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import { auth } from "./firebase";
+import "./App.scss";
+import Login from "./pages/Login/Login";
+import SignUp from "./pages/SignUp/SignUp";
 
 function App() {
+  let [user, setUser] = useState("");
+  let [signedIn, setSignedIn] = useState(false);
+
+  let mountFirebaseAuth = () => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setSignedIn(true);
+      } else setSignedIn(false);
+    });
+  };
+
+  useEffect(mountFirebaseAuth, []);
+
+  let shownScreen = signedIn ? <h1>Welcome</h1> : <Login />;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="page">
+      <div className="content">{shownScreen}</div>
     </div>
   );
 }
