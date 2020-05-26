@@ -24,36 +24,39 @@ export default function SignUp(props) {
 
   return (
     <div className="SignUp">
-      <h1>Create Account</h1>
-      <form>
-        <TextField
-          type="text"
-          placeholder="Email"
-          onChange={setEmail}
-          value={email}
-        />
-        <TextField
-          type="password"
-          placeholder="Password"
-          onChange={setPassword}
-          value={password}
-        />
-        <TextField
-          type="password"
-          placeholder="Confirm Password"
-          onChange={setConfirmPassword}
-          value={confirmPassword}
-        />
-        <TextField
-          type="password"
-          placeholder="Entry Code"
-          onChange={setEntryCode}
-          value={entryCode}
-        />
-        <button className="submit-button" onClick={signUp}>
-          Register
-        </button>
-      </form>
+      <div className="signUp-container">
+        <h2>Create Account</h2>
+        <hr />
+        <form>
+          <TextField
+            type="text"
+            placeholder="Email"
+            onChange={setEmail}
+            value={email}
+          />
+          <TextField
+            type="password"
+            placeholder="Password"
+            onChange={setPassword}
+            value={password}
+          />
+          <TextField
+            type="password"
+            placeholder="Confirm Password"
+            onChange={setConfirmPassword}
+            value={confirmPassword}
+          />
+          <TextField
+            type="password"
+            placeholder="Entry Code"
+            onChange={setEntryCode}
+            value={entryCode}
+          />
+          <button className="submit-button" onClick={signUp}>
+            Register
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
