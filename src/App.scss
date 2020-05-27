@@ -24,17 +24,18 @@ body,
     margin: auto;
     box-shadow: 0 0 30px 0px rgba(0, 0, 0, 0.212);
   }
-}
 
-.submit-button {
-  width: 250px;
-  height: 60px;
-  margin: 10px auto;
-  background: #ff5621;
-  font-size: 16px;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: white;
-  border: none;
-  cursor: pointer;
+  .submit-button {
+    width: 250px;
+    height: 40px;
+    margin: 30px auto 0px;
+    padding: 0px;
+    background: #ff5621;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
 }

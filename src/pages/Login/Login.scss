@@ -8,15 +8,49 @@
   height: 100%;
   .login-container {
     background: white;
-    padding: 20px 40px;
+    padding: 20px 40px 10px;
+    border-radius: 2px;
 
     h2 {
-      text-transform: uppercase;
+      margin: 0 auto;
       font-weight: normal;
       color: #414141;
     }
 
+    hr {
+      margin: 12px auto 0;
+      width: 30%;
+      border: 0.5px solid rgba(0, 0, 0, 0.1);
+    }
+
     form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      button {
+        margin-bottom: 10px;
+      }
+    }
+
+    .links {
+      display: flex;
+      align-items: center;
+
+      a {
+        margin: 5px 10px;
+        font-size: 14px;
+        color: #858585;
+        border-bottom: 1px solid rgba(0, 0, 0, 0);
+        cursor: pointer;
+
+        @media(hover: hover) and (pointer: fine) {
+          &:hover {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+          }
+        }
+      }
     }
   }
 }

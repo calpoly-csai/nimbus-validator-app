@@ -20,10 +20,12 @@ export default function Login(props) {
       return;
     }
   };
+
   return (
     <div className="Login">
       <div className="login-container">
-        <h2>Login</h2>
+        <h2>Sign In</h2>
+        <hr />
         <form onSubmit={(e) => e.preventDefault()}>
           <TextField
             type="text"
@@ -43,6 +45,10 @@ export default function Login(props) {
             Sign In
           </button>
         </form>
+        <div className="links">
+          <a>Create Account</a>
+          <a>Forgot Password</a>
+        </div>
       </div>
     </div>
   );

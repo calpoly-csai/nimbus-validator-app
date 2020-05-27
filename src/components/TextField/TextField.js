@@ -20,7 +20,7 @@ export default function TextField(props) {
   }
 
   if (!isValid) {
-    errorStyle = { border: "3px solid red", background: "salmon" };
+    errorStyle = { border: "3px solid red" };
   }
   return (
     <div className="TextField">
