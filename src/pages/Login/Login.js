@@ -26,7 +26,7 @@ export default function Login(props) {
   return (
     <div className="Login">
       <div className="login-container">
-        <div className="title">
+        <div className="account-title">
           <h2>Log In</h2>
           <div className="header-hr"></div>
         </div>
@@ -49,7 +49,7 @@ export default function Login(props) {
             Log In
           </button>
         </form>
-        <div className="links">
+        <div className="acccount-links">
           <Link className="link" to="/forgotPassword">Forgot Password</Link>
           <Link className="link" to="/signUp">New here? Sign Up</Link>
         </div>

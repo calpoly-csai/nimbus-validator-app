@@ -6,7 +6,7 @@ import "./App.scss";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
-import SignOut from "./components/SignOut/SignOut";
+import Validator from "./pages/Validator/Validator";
 
 function App() {
   let [user, setUser] = useState("");
@@ -22,18 +22,13 @@ function App() {
 
   useEffect(mountFirebaseAuth, []);
 
-  let shownScreen = signedIn ? 
-                    <div>
-                      <h1>Welcome</h1>
-                      <SignOut />
-                    </div> : 
-                    <Login />;
+  let shownScreen = signedIn ? <Validator /> : <Login />;
 
   return (
     <div className="page">
       <div className="content">
         <Switch>
-          <Route path="/signUp" render={()=><SignUp/>} /> 
+          <Route path="/signUp" render={()=><SignUp/>} />
           <Route path="/forgotPassword" render={()=><ForgotPassword/>}/>
           <Route path="/" render={()=>shownScreen}/>
         </Switch>

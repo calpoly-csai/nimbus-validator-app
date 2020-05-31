@@ -24,7 +24,7 @@ export default function ForgotPassword(props) {
   return (
     <div className="ForgotPassword">
       <div className="forgotPassword-container">
-        <div className="title">
+        <div className="account-title">
           <h2>Forgot Password</h2>
           <div className="header-hr"></div>
         </div>
@@ -41,7 +41,7 @@ export default function ForgotPassword(props) {
             Send
           </button>
         </form>
-        <div className="links">
+        <div className="acccount-links">
           <Link className="link" to="/">Back to Log In</Link>
         </div>
       </div>

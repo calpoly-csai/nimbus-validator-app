@@ -30,7 +30,7 @@ export default function SignUp(props) {
   return (
     <div className="SignUp">
       <div className="signUp-container">
-        <div className="title">
+        <div className="account-title">
           <h2>Sign Up</h2>
           <div className="header-hr"></div>
         </div>
@@ -63,7 +63,7 @@ export default function SignUp(props) {
             Register
           </button>
         </form>
-        <div className="links">
+        <div className="acccount-links">
           <Link className="link" to="/">Already have an account? Log In</Link>
         </div>
       </div>
