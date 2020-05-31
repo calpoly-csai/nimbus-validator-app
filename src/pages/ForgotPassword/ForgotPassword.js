@@ -27,6 +27,7 @@ export default function ForgotPassword(props) {
           <h2>Forgot Password</h2>
           <div className="header-hr"></div>
         </div>
+        <h4>Please enter your email to reset your password.</h4>
         <form onSubmit={(e) => e.preventDefault()}>
           <TextField
             type="text"
@@ -36,7 +37,7 @@ export default function ForgotPassword(props) {
             validator={(value) => value && isEmail(value)}
           />
           <button className="submit-button" onClick={forgotPassword}>
-            Send Email
+            Send
           </button>
         </form>
       </div>

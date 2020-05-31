@@ -26,7 +26,7 @@ export default function Login(props) {
     <div className="Login">
       <div className="login-container">
         <div className="title">
-          <h2>Login</h2>
+          <h2>Log In</h2>
           <div className="header-hr"></div>
         </div>
         <form onSubmit={(e) => e.preventDefault()}>
@@ -45,12 +45,12 @@ export default function Login(props) {
             validator={(value) => value && value.length > 7}
           />
           <button className="submit-button" onClick={logInUser}>
-            Sign In
+            Log In
           </button>
         </form>
         <div className="links">
-          <a>Create Account</a>
           <a>Forgot Password</a>
+          <a>Not a member? Sign Up</a>
         </div>
       </div>
     </div>

@@ -26,7 +26,7 @@ export default function SignUp(props) {
     <div className="SignUp">
       <div className="signUp-container">
         <div className="title">
-          <h2>Create Account</h2>
+          <h2>Sign Up</h2>
           <div className="header-hr"></div>
         </div>
         <form>
