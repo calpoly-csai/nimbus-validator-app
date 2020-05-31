@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { auth } from "./firebase";
 
 import "./App.scss";
@@ -16,21 +16,32 @@ function App() {
     auth.onAuthStateChanged((user) => {
       if (user) {
         setSignedIn(true);
-      } else setSignedIn(false);
+        setUser(auth.currentUser);
+      } else {
+        setSignedIn(false);
+        setUser(""); 
+      }
     });
   };
 
   useEffect(mountFirebaseAuth, []);
 
-  let shownScreen = signedIn ? <Validator /> : <Login />;
-
   return (
     <div className="page">
       <div className="content">
         <Switch>
-          <Route path="/signUp" render={()=><SignUp/>} />
-          <Route path="/forgotPassword" render={()=><ForgotPassword/>}/>
-          <Route path="/" render={()=>shownScreen}/>
+          <Route path="/signUp" exact component={SignUp} />
+          <Route path="/forgotPassword" exact component={ForgotPassword} />
+          <Route path="/login" exact component={Login} />
+          { signedIn && 
+            <Route path="/validator" exact component={Validator} />
+          }
+          <Route path="/" exact render={() => (
+                    signedIn ?
+                    <Redirect to="/validator" /> :
+                    <Redirect to="/login" /> 
+                )}
+          />
         </Switch>
       </div>
     </div>

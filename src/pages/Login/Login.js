@@ -45,9 +45,11 @@ export default function Login(props) {
             value={password}
             validator={(value) => value && value.length > 7}
           />
-          <button className="submit-button" onClick={logInUser}>
-            Log In
-          </button>
+          <Link to="/validator">
+            <button className="submit-button" onClick={logInUser}>
+              Log In
+            </button>
+          </Link>
         </form>
         <div className="acccount-links">
           <Link className="link" to="/forgotPassword">Forgot Password</Link>

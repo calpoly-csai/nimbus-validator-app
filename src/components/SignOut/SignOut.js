@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./SignOut.scss";
 import { auth } from "../../firebase";
 
@@ -17,9 +18,11 @@ export default function SignOut(props) {
 
   return (
     <div className="SignOut">
-      <button className="signOut-button" onClick={signOutUser}>
-        Sign Out
-      </button>
+      <Link to="/login">
+        <button className="signOut-button" onClick={signOutUser}>
+          Sign Out
+        </button>
+      </Link>
     </div>
   );
 }
