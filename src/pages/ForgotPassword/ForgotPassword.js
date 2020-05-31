@@ -27,7 +27,7 @@ export default function ForgotPassword(props) {
           <h2>Forgot Password</h2>
           <div className="header-hr"></div>
         </div>
-        <h4>Please enter your email to reset your password.</h4>
+        <h4>Enter your email to reset your password.</h4>
         <form onSubmit={(e) => e.preventDefault()}>
           <TextField
             type="text"
@@ -40,6 +40,9 @@ export default function ForgotPassword(props) {
             Send
           </button>
         </form>
+        <div className="links">
+          <a>Back to Log In</a>
+        </div>
       </div>
     </div>
   )

@@ -35,5 +35,21 @@
                               rgba(128,85,162,1) 100%);
       }
     }
+
+    form {
+      button {
+        margin-bottom: 10px;
+      }
+    }
+
+    .links {
+      a {
+        margin: 5px auto;
+        font-size: 12px;
+        font-weight: bold;
+        color: #858585;
+        cursor: pointer;
+      }
+    }
   }
 }

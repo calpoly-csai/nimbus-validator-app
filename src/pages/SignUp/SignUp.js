@@ -15,10 +15,14 @@ export default function SignUp(props) {
     password === confirmPassword;
 
   const signUp = async () => {
-    try {
-      await auth.createUserWithEmailAndPassword(email, password);
-    } catch (err) {
-      console.error(err.message);
+    if (formIsValid()) {
+      try {
+        await auth.createUserWithEmailAndPassword(email, password);
+      } catch (err) {
+        console.error(err.message);
+      }
+    } else {
+      alert("Please enter a valid email and password.");
     }
   };
 
@@ -58,6 +62,9 @@ export default function SignUp(props) {
             Register
           </button>
         </form>
+        <div className="links">
+          <a>Already have an account? Log In</a>
+        </div>
       </div>
     </div>
   );

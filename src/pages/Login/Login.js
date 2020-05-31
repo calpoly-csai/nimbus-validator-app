@@ -50,7 +50,7 @@ export default function Login(props) {
         </form>
         <div className="links">
           <a>Forgot Password</a>
-          <a>Not a member? Sign Up</a>
+          <a>New here? Sign Up</a>
         </div>
       </div>
     </div>
