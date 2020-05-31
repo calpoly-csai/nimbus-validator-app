@@ -8,19 +8,32 @@
   height: 100%;
   .login-container {
     background: white;
-    padding: 20px 40px 10px;
-    border-radius: 2px;
+    padding: 15px 40px 10px;
+    border-radius: 4px;
 
-    h2 {
-      margin: 0 auto;
-      font-weight: normal;
-      color: #414141;
-    }
+    .title {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: min-content;
 
-    hr {
-      margin: 12px auto 0;
-      width: 30%;
-      border: 0.5px solid rgba(0, 0, 0, 0.1);
+      h2 {
+        white-space: nowrap;
+        margin: 0 auto;
+        font-weight: bold;
+        color: #414141;
+      }
+
+      .header-hr {
+        margin: 6px auto 0;
+        width: 100%;
+        height: 2px;
+        background: rgb(113,204,217);
+        background: linear-gradient(135deg, 
+                              rgba(113,204,217,1) 0%,
+                              rgba(128,85,162,1) 65%, 
+                              rgba(128,85,162,1) 100%);
+      }
     }
 
     form {

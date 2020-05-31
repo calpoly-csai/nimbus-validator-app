@@ -25,8 +25,10 @@ export default function SignUp(props) {
   return (
     <div className="SignUp">
       <div className="signUp-container">
-        <h2>Create Account</h2>
-        <hr />
+        <div className="title">
+          <h2>Create Account</h2>
+          <div className="header-hr"></div>
+        </div>
         <form>
           <TextField
             type="text"

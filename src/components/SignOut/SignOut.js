@@ -15,9 +15,11 @@ export default function SignOut(props) {
 
   return (
     <div className="SignOut">
-      <button onClick={signOutUser}>
-        Sign Out of Account
-      </button>
+      <div className="signOut-container">
+        <button className="submit-button" onClick={signOutUser}>
+          Sign Out of Account
+        </button>
+      </div>
     </div>
   );
 }

@@ -12,7 +12,7 @@ body,
 .page {
   width: 100%;
   height: 100%;
-  background: whitesmoke;
+  background: white;
   text-align: center;
   font-family: "Open Sans", sans-serif;
 
@@ -22,6 +22,7 @@ body,
     height: 100%;
     padding: 20px;
     margin: auto;
+    background: whitesmoke;
     box-shadow: 0 0 30px 0px rgba(0, 0, 0, 0.212);
   }
 
@@ -30,12 +31,29 @@ body,
     height: 40px;
     margin: 30px auto 0px;
     padding: 0px;
-    background: #ff5621;
+    outline: none;
     font-size: 16px;
     font-weight: bold;
-    color: white;
-    border: none;
+    background: none;
+    color: #414141;
+    border: 1px solid #414141;
+    border-radius: 4px;
     cursor: pointer;
-    transition: all 0.3s ease;
+
+    @media(hover: hover) and (pointer: fine) {
+      &:hover {
+        color: white;
+        border: none;
+        background: rgb(113,204,217);
+        background: linear-gradient(135deg, 
+                              rgba(113,204,217,1) 0%,
+                              rgba(128,85,162,1) 65%, 
+                              rgba(128,85,162,1) 100%);
+      }
+    }
+    &:active {
+      transition: all 0.025s ease;
+      transform: translate(0, 1px);
+    }
   }
 }

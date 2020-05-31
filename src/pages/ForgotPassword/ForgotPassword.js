@@ -23,8 +23,10 @@ export default function ForgotPassword(props) {
   return (
     <div className="ForgotPassword">
       <div className="forgotPassword-container">
-        <h2>Send Password Reset Email</h2>
-        <hr />
+        <div className="title">
+          <h2>Forgot Password</h2>
+          <div className="header-hr"></div>
+        </div>
         <form onSubmit={(e) => e.preventDefault()}>
           <TextField
             type="text"
