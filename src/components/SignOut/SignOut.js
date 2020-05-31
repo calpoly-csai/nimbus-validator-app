@@ -1,23 +1,28 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./SignOut.scss";
 import { auth } from "../../firebase";
 
 export default function SignOut(props) {
-
   let signOutUser = async () => {
-    auth.signOut().then(() => {
-      //navigate to Login
-    }).catch(err => {
-      alert(err.message);
-      return;
-    });
-  }
+    auth
+      .signOut()
+      .then(() => {
+        //navigate to Login
+      })
+      .catch((err) => {
+        alert(err.message);
+        return;
+      });
+  };
 
   return (
     <div className="SignOut">
-      <button onClick={signOutUser}>
-        Sign Out of Account
-      </button>
+      <Link to="/login">
+        <button className="signOut-button" onClick={signOutUser}>
+          Sign Out
+        </button>
+      </Link>
     </div>
   );
 }

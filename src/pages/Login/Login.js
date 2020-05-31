@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import "./Login.scss";
+import { Link } from "react-router-dom";
 import { auth } from "../../firebase";
+
+import "./Login.scss";
 import TextField from "../../components/TextField/TextField";
 import { isEmail } from "../../modules/validators";
 
@@ -24,8 +26,10 @@ export default function Login(props) {
   return (
     <div className="Login">
       <div className="login-container">
-        <h2>Sign In</h2>
-        <hr />
+        <div className="account-title">
+          <h2>Log In</h2>
+          <div className="header-hr"></div>
+        </div>
         <form onSubmit={(e) => e.preventDefault()}>
           <TextField
             type="text"
@@ -41,13 +45,15 @@ export default function Login(props) {
             value={password}
             validator={(value) => value && value.length > 7}
           />
-          <button className="submit-button" onClick={logInUser}>
-            Sign In
-          </button>
+          <Link to="/validator">
+            <button className="submit-button" onClick={logInUser}>
+              Log In
+            </button>
+          </Link>
         </form>
-        <div className="links">
-          <a>Create Account</a>
-          <a>Forgot Password</a>
+        <div className="acccount-links">
+          <Link className="link" to="/forgotPassword">Forgot Password</Link>
+          <Link className="link" to="/signUp">New here? Sign Up</Link>
         </div>
       </div>
     </div>

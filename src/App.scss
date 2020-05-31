@@ -22,20 +22,90 @@ body,
     height: 100%;
     padding: 20px;
     margin: auto;
+    background: white;
     box-shadow: 0 0 30px 0px rgba(0, 0, 0, 0.212);
+  }
+
+  .account-title {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: min-content;
+
+    h2 {
+      white-space: nowrap;
+      margin: 0 auto;
+      font-weight: bold;
+      color: #414141;
+    }
+
+    .header-hr {
+      margin: 6px auto 0;
+      width: 100%;
+      height: 2px;
+      background: rgb(113, 204, 217);
+      background: linear-gradient(
+        135deg,
+        rgba(113, 204, 217, 1) 0%,
+        rgba(128, 85, 162, 1) 65%,
+        rgba(128, 85, 162, 1) 100%
+      );
+    }
+  }
+
+  .acccount-links {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .link {
+      margin: 5px auto;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: bold;
+      color: #858585;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: all 0.2s;
+
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
   }
 
   .submit-button {
     width: 250px;
     height: 40px;
-    margin: 30px auto 0px;
+    margin: 30px auto 10px;
     padding: 0px;
-    background: #ff5621;
+    outline: none;
     font-size: 16px;
     font-weight: bold;
-    color: white;
-    border: none;
+    background: none;
+    color: #414141;
+    border: 1px solid #414141;
+    border-radius: 4px;
     cursor: pointer;
-    transition: all 0.3s ease;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        color: white;
+        border: none;
+        background: rgb(113, 204, 217);
+        background: linear-gradient(
+          135deg,
+          rgba(113, 204, 217, 1) 0%,
+          rgba(128, 85, 162, 1) 65%,
+          rgba(128, 85, 162, 1) 100%
+        );
+      }
+    }
+    &:active {
+      transition: all 0.025s ease;
+      transform: translate(0, 1px);
+    }
   }
 }

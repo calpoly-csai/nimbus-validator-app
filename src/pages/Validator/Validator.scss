@@ -1,0 +1,42 @@
+.Validator {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  // justify-content: center;
+  // align-items: center;
+  width: 100%;
+  height: 100%;
+
+  .signOut {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .validator-content {
+    .title {
+      margin: 20px 0;
+    }
+    .text-editor {
+      .text-input {
+        min-height: 54px;
+        padding: 15px;
+        border-radius: 7px;
+        background: whitesmoke;
+        max-height: 200px;
+        overflow-y: scroll;
+      }
+    }
+
+    .field-label {
+      margin-top: 15px;
+      margin-bottom: 5px;
+      font-size: 15px;
+    }
+  }
+
+  .validator-buttons {
+    display: flex;
+    justify-content: center;
+  }
+}

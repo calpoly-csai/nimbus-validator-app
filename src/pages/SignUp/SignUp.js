@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import TextField from "../../components/TextField/TextField";
 import "./SignUp.scss";
 import { auth } from "../../firebase";
@@ -15,18 +16,24 @@ export default function SignUp(props) {
     password === confirmPassword;
 
   const signUp = async () => {
-    try {
-      await auth.createUserWithEmailAndPassword(email, password);
-    } catch (err) {
-      console.error(err.message);
+    if (formIsValid()) {
+      try {
+        await auth.createUserWithEmailAndPassword(email, password);
+      } catch (err) {
+        console.error(err.message);
+      }
+    } else {
+      alert("Please enter a valid email and password.");
     }
   };
 
   return (
     <div className="SignUp">
       <div className="signUp-container">
-        <h2>Create Account</h2>
-        <hr />
+        <div className="account-title">
+          <h2>Sign Up</h2>
+          <div className="header-hr"></div>
+        </div>
         <form>
           <TextField
             type="text"
@@ -56,6 +63,9 @@ export default function SignUp(props) {
             Register
           </button>
         </form>
+        <div className="acccount-links">
+          <Link className="link" to="/">Already have an account? Log In</Link>
+        </div>
       </div>
     </div>
   );

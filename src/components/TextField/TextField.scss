@@ -12,7 +12,9 @@
   input {
     height: 50px;
     width: 100%;
+    outline: none;
     border: none;
+    border-radius: 4px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     padding: 0 0 0 20px;
     &::placeholder {
