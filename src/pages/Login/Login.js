@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import "./Login.scss";
 import { auth } from "../../firebase";
+
+import "./Login.scss";
 import TextField from "../../components/TextField/TextField";
 import { isEmail } from "../../modules/validators";
 
