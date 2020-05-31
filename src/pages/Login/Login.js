@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { auth } from "../../firebase";
 
 import "./Login.scss";
@@ -49,8 +50,8 @@ export default function Login(props) {
           </button>
         </form>
         <div className="links">
-          <a>Forgot Password</a>
-          <a>New here? Sign Up</a>
+          <Link className="link" to="/forgotPassword">Forgot Password</Link>
+          <Link className="link" to="/signUp">New here? Sign Up</Link>
         </div>
       </div>
     </div>

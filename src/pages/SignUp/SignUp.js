@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import TextField from "../../components/TextField/TextField";
 import "./SignUp.scss";
 import { auth } from "../../firebase";
@@ -63,7 +64,7 @@ export default function SignUp(props) {
           </button>
         </form>
         <div className="links">
-          <a>Already have an account? Log In</a>
+          <Link className="link" to="/">Already have an account? Log In</Link>
         </div>
       </div>
     </div>

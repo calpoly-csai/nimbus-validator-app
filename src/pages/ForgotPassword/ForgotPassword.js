@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "./ForgotPassword.scss";
 import { auth } from "../../firebase";
 import TextField from "../../components/TextField/TextField";
@@ -41,7 +42,7 @@ export default function ForgotPassword(props) {
           </button>
         </form>
         <div className="links">
-          <a>Back to Log In</a>
+          <Link className="link" to="/">Back to Log In</Link>
         </div>
       </div>
     </div>
