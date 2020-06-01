@@ -31,7 +31,7 @@ export default function Login(props) {
 
   return (
     <div className="Login">
-      <div className="login-container">
+      <div className="account-container">
         <div className="account-title">
           <h2>Log In</h2>
           <div className="header-hr"></div>
