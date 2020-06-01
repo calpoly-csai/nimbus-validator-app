@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { auth } from "../../firebase";
 
 import "./Login.scss";
@@ -9,6 +9,8 @@ import { isEmail } from "../../modules/validators";
 export default function Login(props) {
   let [username, setUsername] = useState("");
   let [password, setPassword] = useState("");
+
+  let history = useHistory();
 
   let formIsValid = () =>
     username && password && password.length > 7 && isEmail(username);
@@ -22,6 +24,7 @@ export default function Login(props) {
       alert(err.message);
       return;
     }
+    history.push("/");
   };
 
   return (
@@ -46,11 +49,9 @@ export default function Login(props) {
             value={password}
             validator={(value) => value && value.length > 7}
           />
-          <Link to="/validator">
-            <button className="submit-button" onClick={logInUser}>
-              Log In
-            </button>
-          </Link>
+          <button className="submit-button" onClick={logInUser}>
+            Log In
+          </button>
         </form>
         <div className="acccount-links">
           <Link className="link" to="/forgotPassword">Forgot Password</Link>

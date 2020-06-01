@@ -28,7 +28,9 @@ function App() {
           <Route path="/signUp" exact component={SignUp} />
           <Route path="/forgotPassword" exact component={ForgotPassword} />
           <Route path="/login" exact render={() =>
-            <Login setSignedIn={setSignedIn} />
+            <Login
+              setSignedIn={setSignedIn}
+            />
           } />
           { signedIn && 
             <Route path="/validator" exact render={() =>
