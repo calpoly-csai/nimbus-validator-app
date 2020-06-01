@@ -3,7 +3,7 @@ import "./Validator.scss";
 
 import SignOut from "../../components/SignOut/SignOut";
 
-export default function Validator() {
+export default function Validator(props) {
   let [isTokenizerShown, setIsTokenizerShown] = useState(true);
 
   let tokenizer = (
@@ -52,7 +52,7 @@ export default function Validator() {
   return (
     <div className="Validator">
       <div className="signOut">
-        <SignOut />
+        <SignOut setSignedIn={props.setSignedIn} />
       </div>
 
       <div className="validator-content">

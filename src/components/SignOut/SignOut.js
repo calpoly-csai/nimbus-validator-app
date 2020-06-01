@@ -9,6 +9,7 @@ export default function SignOut(props) {
       .signOut()
       .then(() => {
         //navigate to Login
+        props.setSignedIn(false);
       })
       .catch((err) => {
         alert(err.message);
