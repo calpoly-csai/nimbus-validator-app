@@ -30,6 +30,7 @@ function App() {
           <Route path="/login" exact render={() =>
             <Login
               setSignedIn={setSignedIn}
+              setUser={setUser}
             />
           } />
           { signedIn && 

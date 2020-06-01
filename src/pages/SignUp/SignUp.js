@@ -15,7 +15,8 @@ export default function SignUp(props) {
     isEmail(email) &&
     password === confirmPassword;
 
-  const signUp = async () => {
+  const signUp = async (e) => {
+    e.preventDefault();
     if (formIsValid()) {
       try {
         await auth.createUserWithEmailAndPassword(email, password);
@@ -34,7 +35,7 @@ export default function SignUp(props) {
           <h2>Sign Up</h2>
           <div className="header-hr"></div>
         </div>
-        <form>
+        <form onSubmit={signUp}>
           <TextField
             type="text"
             placeholder="Email"
@@ -59,7 +60,7 @@ export default function SignUp(props) {
             onChange={setEntryCode}
             value={entryCode}
           />
-          <button className="submit-button" onClick={signUp}>
+          <button className="submit-button" type="submit">
             Register
           </button>
         </form>

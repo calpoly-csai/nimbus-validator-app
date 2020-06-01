@@ -8,7 +8,8 @@ import { isEmail } from "../../modules/validators";
 export default function ForgotPassword(props) {
   let [email, setEmail] = useState("");
 
-  let forgotPassword = () => {
+  let forgotPassword = (e) => {
+    e.preventDefault();
     if (isEmail(email)) {
       auth.sendPasswordResetEmail(email).then(function() {
         // Email sent.
@@ -29,7 +30,7 @@ export default function ForgotPassword(props) {
           <div className="header-hr"></div>
         </div>
         <h4>Enter your email to reset your password.</h4>
-        <form onSubmit={(e) => e.preventDefault()}>
+        <form onSubmit={forgotPassword}>
           <TextField
             type="text"
             placeholder="Email"
@@ -37,7 +38,7 @@ export default function ForgotPassword(props) {
             value={email}
             validator={(value) => value && isEmail(value)}
           />
-          <button className="submit-button" onClick={forgotPassword}>
+          <button className="submit-button" type="submit">
             Send
           </button>
         </form>

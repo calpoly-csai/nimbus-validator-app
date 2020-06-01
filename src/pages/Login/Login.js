@@ -15,11 +15,13 @@ export default function Login(props) {
   let formIsValid = () =>
     username && password && password.length > 7 && isEmail(username);
 
-  let logInUser = async () => {
+  let logInUser = async (e) => {
+    e.preventDefault();
     if (!formIsValid()) return;
     try {
       const user = await auth.signInWithEmailAndPassword(username, password);
       props.setSignedIn(true);
+      props.setUser(user);
     } catch (err) {
       alert(err.message);
       return;
@@ -34,7 +36,7 @@ export default function Login(props) {
           <h2>Log In</h2>
           <div className="header-hr"></div>
         </div>
-        <form onSubmit={(e) => e.preventDefault()}>
+        <form onSubmit={logInUser}>
           <TextField
             type="text"
             placeholder="Username"
@@ -49,7 +51,7 @@ export default function Login(props) {
             value={password}
             validator={(value) => value && value.length > 7}
           />
-          <button className="submit-button" onClick={logInUser}>
+          <button className="submit-button" type="submit">
             Log In
           </button>
         </form>
