@@ -26,6 +26,12 @@ body,
     box-shadow: 0 0 30px 0px rgba(0, 0, 0, 0.212);
   }
 
+  .account-container {
+    padding: 15px 40px 10px;
+    border: 1px solid #414141;
+    border-radius: 4px;
+  }
+
   .account-title {
     display: block;
     margin-left: auto;

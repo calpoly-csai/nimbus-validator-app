@@ -3,7 +3,7 @@ import "./Validator.scss";
 
 import SignOut from "../../components/SignOut/SignOut";
 
-export default function Validator() {
+export default function Validator(props) {
   let [isTokenizerShown, setIsTokenizerShown] = useState(true);
 
   let tokenizer = (

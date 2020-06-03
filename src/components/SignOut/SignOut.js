@@ -1,14 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import "./SignOut.scss";
 import { auth } from "../../firebase";
 
 export default function SignOut(props) {
+  let history = useHistory();
+
   let signOutUser = async () => {
     auth
       .signOut()
       .then(() => {
-        //navigate to Login
+        history.push("/login");
       })
       .catch((err) => {
         alert(err.message);
@@ -18,11 +20,9 @@ export default function SignOut(props) {
 
   return (
     <div className="SignOut">
-      <Link to="/login">
-        <button className="signOut-button" onClick={signOutUser}>
-          Sign Out
-        </button>
-      </Link>
+      <button className="signOut-button" onClick={signOutUser}>
+        Sign Out
+      </button>
     </div>
   );
 }

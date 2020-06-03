@@ -9,18 +9,13 @@ import SignUp from "./pages/SignUp/SignUp";
 import Validator from "./pages/Validator/Validator";
 
 function App() {
-  let [user, setUser] = useState("");
+  let [user, setUser] = useState(null);
   let [signedIn, setSignedIn] = useState(false);
 
   let mountFirebaseAuth = () => {
     auth.onAuthStateChanged((user) => {
-      if (user) {
-        setSignedIn(true);
-        setUser(auth.currentUser);
-      } else {
-        setSignedIn(false);
-        setUser(""); 
-      }
+      setUser(auth.currentUser);
+      user ? setSignedIn(true) : setSignedIn(false);
     });
   };
 
@@ -39,7 +34,7 @@ function App() {
           <Route path="/" exact render={() => (
                     signedIn ?
                     <Redirect to="/validator" /> :
-                    <Redirect to="/login" /> 
+                    <Redirect to="/login" />
                 )}
           />
         </Switch>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { auth } from "../../firebase";
 
 import "./Login.scss";
@@ -10,10 +10,13 @@ export default function Login(props) {
   let [username, setUsername] = useState("");
   let [password, setPassword] = useState("");
 
+  let history = useHistory();
+
   let formIsValid = () =>
     username && password && password.length > 7 && isEmail(username);
 
-  let logInUser = async () => {
+  let logInUser = async (e) => {
+    e.preventDefault();
     if (!formIsValid()) return;
     try {
       const user = await auth.signInWithEmailAndPassword(username, password);
@@ -21,16 +24,17 @@ export default function Login(props) {
       alert(err.message);
       return;
     }
+    history.push("/");
   };
 
   return (
     <div className="Login">
-      <div className="login-container">
+      <div className="account-container">
         <div className="account-title">
           <h2>Log In</h2>
           <div className="header-hr"></div>
         </div>
-        <form onSubmit={(e) => e.preventDefault()}>
+        <form onSubmit={logInUser}>
           <TextField
             type="text"
             placeholder="Username"
@@ -45,11 +49,9 @@ export default function Login(props) {
             value={password}
             validator={(value) => value && value.length > 7}
           />
-          <Link to="/validator">
-            <button className="submit-button" onClick={logInUser}>
-              Log In
-            </button>
-          </Link>
+          <button className="submit-button" type="submit">
+            Log In
+          </button>
         </form>
         <div className="acccount-links">
           <Link className="link" to="/forgotPassword">Forgot Password</Link>
