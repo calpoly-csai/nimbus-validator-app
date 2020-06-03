@@ -27,16 +27,9 @@ function App() {
         <Switch>
           <Route path="/signUp" exact component={SignUp} />
           <Route path="/forgotPassword" exact component={ForgotPassword} />
-          <Route path="/login" exact render={() =>
-            <Login
-              setSignedIn={setSignedIn}
-              setUser={setUser}
-            />
-          } />
+          <Route path="/login" exact component={Login} />
           { signedIn && 
-            <Route path="/validator" exact render={() =>
-              <Validator setSignedIn={setSignedIn} />
-            } />
+            <Route path="/validator" exact component={Validator} />
           }
           <Route path="/" exact render={() => (
                     signedIn ?

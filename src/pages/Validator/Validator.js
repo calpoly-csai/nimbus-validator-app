@@ -52,7 +52,7 @@ export default function Validator(props) {
   return (
     <div className="Validator">
       <div className="signOut">
-        <SignOut setSignedIn={props.setSignedIn} />
+        <SignOut />
       </div>
 
       <div className="validator-content">

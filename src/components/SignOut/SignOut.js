@@ -10,7 +10,6 @@ export default function SignOut(props) {
     auth
       .signOut()
       .then(() => {
-        props.setSignedIn(false);
         history.push("/login");
       })
       .catch((err) => {
