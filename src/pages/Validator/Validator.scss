@@ -1,9 +1,10 @@
 .ValidatorPage {
+  // position: relative;
   color: var(--text);
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-rows: auto 100%;
+  grid-template-rows: 120px min-content 50px;
   grid-template-columns: 1fr 1fr 1fr;
   row-gap: 20px;
   column-gap: 20px;
@@ -12,7 +13,8 @@
   background: white;
   grid-template-areas:
     "head head head"
-    "left form sidebar";
+    "left form sidebar"
+    "left nav sidebar";
 
   .field-title {
     font-weight: bold;
@@ -46,11 +48,14 @@
 
   .query-properties {
     display: flex;
+    justify-content: center;
     align-items: center;
     margin: 20px 0;
   }
 
   .submit-options {
+    display: flex;
+    justify-content: center;
     button {
       border: none;
       font-family: inherit;
@@ -116,10 +121,10 @@
     padding: 5px;
     margin: 0;
     background: var(--backdrop);
-    border: 1px solid var(--shadow);
     border-radius: 16px;
     list-style: none;
     overflow: hidden;
+    border: 2px solid var(--shadow);
 
     button {
       z-index: 1;
@@ -146,7 +151,7 @@
 
   select {
     background: white;
-    border: 1px solid var(--shadow);
+    border: 2px solid var(--shadow);
     border-radius: 16px;
     padding: 5px 20px;
     width: 150px;
@@ -160,4 +165,32 @@
   height: 70%;
   width: 90%;
   min-height: 400px;
+}
+
+.ValidatorQueryNav {
+  position: relative;
+  grid-area: nav;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+
+  .center-line {
+    position: absolute;
+    left: 0;
+    top: 15px;
+    width: 100%;
+    border: 2px solid var(--shadow);
+  }
+
+  .query-nav {
+    transform: rotate(45deg);
+    background: white;
+    border: 2px solid var(--shadow);
+    border-radius: 3px;
+    width: 20px;
+    height: 20px;
+    transition: background 0.5s;
+  }
 }
