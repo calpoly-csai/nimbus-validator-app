@@ -1,42 +1,163 @@
-.Validator {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  // justify-content: center;
-  // align-items: center;
+.ValidatorPage {
+  color: var(--text);
   width: 100%;
   height: 100%;
+  display: grid;
+  grid-template-rows: auto 100%;
+  grid-template-columns: 1fr 1fr 1fr;
+  row-gap: 20px;
+  column-gap: 20px;
+  justify-items: center;
+  align-items: flex-start;
+  background: white;
+  grid-template-areas:
+    "head head head"
+    "left form sidebar";
 
-  .signOut {
-    position: absolute;
-    top: 0;
-    right: 0;
+  .field-title {
+    font-weight: bold;
+    font-size: 15px;
+    // line-height: 18px;
+    color: #c3c7e2;
+    // padding: 10px 0;
+    margin: 5px;
+    margin-left: 10px;
   }
 
-  .validator-content {
-    .title {
-      margin: 20px 0;
-    }
-    .text-editor {
-      .text-input {
-        min-height: 54px;
-        padding: 15px;
-        border-radius: 7px;
-        background: whitesmoke;
-        max-height: 200px;
-        overflow-y: scroll;
-      }
-    }
-
-    .field-label {
-      margin-top: 15px;
-      margin-bottom: 5px;
-      font-size: 15px;
-    }
+  @media screen and (max-width: 600px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media screen and (max-width: 400px) {
+    grid-template-columns: 1fr;
   }
 
-  .validator-buttons {
+  .title {
+    grid-area: head;
+    margin: 0;
+    padding: 20px;
+    padding-top: 40px;
+  }
+}
+
+.ValidatorForm {
+  text-align: left;
+  grid-area: form;
+  margin: 20px 0;
+
+  .query-properties {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
   }
+
+  .submit-options {
+    button {
+      border: none;
+      font-family: inherit;
+      padding: 10px 20px;
+      margin-right: 20px;
+      border-radius: 5px;
+      color: white;
+    }
+    .validator-submit-button {
+      background: var(--confirm);
+    }
+    .validator-deny-button {
+      background: var(--deny);
+    }
+  }
+}
+
+.ValidatorField {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  grid-template-areas: "field-block field-title" "field-block field-input";
+  margin: 20px 0;
+
+  .block {
+    grid-area: field-block;
+    width: 11px;
+    height: auto;
+    background: var(--shadow);
+    border-radius: 3px;
+    margin-right: 10px;
+    transition: transform 0.4s ease-out;
+  }
+
+  .field-title {
+    grid-area: field-title;
+  }
+
+  .text-field {
+    grid-area: field-input;
+    text-align: left;
+    width: 400px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 24px;
+    padding: 10px;
+  }
+}
+
+.ValidatorToggle {
+  $toggler-margin: 20px;
+  margin: $toggler-margin;
+
+  &:first-child {
+    margin: $toggler-margin 0;
+  }
+
+  .options {
+    position: relative;
+    display: flex;
+    padding: 5px;
+    margin: 0;
+    background: var(--backdrop);
+    border: 1px solid var(--shadow);
+    border-radius: 16px;
+    list-style: none;
+    overflow: hidden;
+
+    button {
+      z-index: 1;
+      width: 100%;
+      border: none;
+      background: transparent;
+    }
+
+    .selection-indicator {
+      transition: left 0.5s ease-out;
+      position: absolute;
+      background: white;
+      top: 0;
+      left: 0;
+      height: 100%;
+      border-radius: 16px;
+      z-index: 0;
+    }
+  }
+}
+
+.ValidatorSelector {
+  margin: 20px;
+
+  select {
+    background: white;
+    border: 1px solid var(--shadow);
+    border-radius: 16px;
+    padding: 5px 20px;
+    width: 150px;
+  }
+}
+
+.TokenBar {
+  grid-area: sidebar;
+  background: var(--backdrop);
+  border-radius: 5px;
+  height: 70%;
+  width: 90%;
+  min-height: 400px;
 }
