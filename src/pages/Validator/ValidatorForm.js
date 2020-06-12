@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import ValidatorField from "./ValidatorField";
 import ValidatorToggle from "./ValidatorToggle";
 import ValidatorSelector from "./ValidatorSelector";
@@ -18,8 +18,12 @@ export default function ValidatorForm(props) {
   };
   return (
     <form className="ValidatorForm" onSubmit={(e) => e.preventDefault()}>
-      <ValidatorField title="Question" value={question} changed={setQuestion} />
-      <ValidatorField title="Answer" value={answer} changed={setAnswer} />
+      <ValidatorField
+        title="Question"
+        value={question}
+        onChange={setQuestion}
+      />
+      <ValidatorField title="Answer" value={answer} onChange={setAnswer} />
       <div className="query-properties">
         <ValidatorToggle
           title="Can we answer?"
