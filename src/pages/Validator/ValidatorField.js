@@ -1,38 +1,15 @@
 import React, { Component } from "react";
 import Token from "./Token";
 import ContentEditable from "react-contenteditable";
+import AutocompleteList from "./AutocompleteList";
 export default class ValidatorField extends Component {
   state = {
     html: "",
     isFocused: false,
     fieldRef: React.createRef(),
+    showAutocomplete: false,
+    tokenVal: "",
   };
-  render() {
-    let focusedBlock = {
-      background: "var(--accent)",
-      transform: "scaleX(1.4) translateX(-2px)",
-    };
-
-    return (
-      <div className="ValidatorField">
-        <div
-          className="block"
-          style={this.state.isFocused ? focusedBlock : null}
-        ></div>
-        <h3 className="field-title">{this.props.title}</h3>
-        <ContentEditable
-          onBlur={this.toggleFocus.bind(this)}
-          onFocus={this.toggleFocus.bind(this)}
-          onKeyDown={this.toggleToken.bind(this)}
-          className="text-field"
-          innerRef={this.state.fieldRef}
-          onChange={this.handleTextInput.bind(this)}
-          html={this.state.html} // innerHTML of the editable div
-          disabled={false} // use true to disable editing
-        />
-      </div>
-    );
-  }
 
   componentDidMount() {
     this.setState({ html: this.formatQueryHTML(this.props.value) });
@@ -54,10 +31,10 @@ export default class ValidatorField extends Component {
     document.execCommand("underline");
     document.execCommand("insertText", true, " ");
     e.preventDefault();
-    console.log("insert");
   }
 
   toggleFocus() {
+    this.updateAutocomplete();
     this.setState((state) => ({
       isFocused: !state.isFocused,
     }));
@@ -80,17 +57,75 @@ export default class ValidatorField extends Component {
       innerHTML.slice(0, fontStart) +
       innerHTML.slice(uStart, uEnd) +
       innerHTML.slice(fontEnd);
-    console.log("filtered html", filteredHTML);
     return filteredHTML;
+  }
+
+  updateAutocomplete() {
+    let sel = window.getSelection();
+    let isToken = sel?.anchorNode?.parentElement?.nodeName === "U";
+    if (isToken) {
+      this.setState({ showAutocomplete: true });
+      this.setState({ tokenVal: sel.anchorNode.wholeText });
+    } else {
+      this.setState({ showAutocomplete: false });
+      this.setState({ tokenVal: "" });
+    }
+  }
+
+  autocompleteVal(val) {
+    //TODO: This replaces first element that matches, even if outside token. Maybe keep track token index and replace only token's innerHTML
+    let updatedContent = this.state.html.replace(this.state.tokenVal, val);
+    this.setState({ html: updatedContent });
+  }
+
+  createToken(title) {
+    console.log("Create a token with title", title);
   }
 
   handleTextInput = (e) => {
     let val = this.formatHTML(e.target.value);
     this.setState({ html: val });
+    this.updateAutocomplete();
     val = val
       .replace(/<u>/g, "{")
       .replace(/<\/u>/g, "}")
       .replace(/&nbsp;/g, "");
     this.props.onChange(val);
   };
+
+  render() {
+    let focusedBlock = {
+      background: "var(--accent)",
+      transform: "scaleX(1.4) translateX(-2px)",
+    };
+
+    return (
+      <div className="ValidatorField">
+        <div
+          className="block"
+          style={this.state.isFocused ? focusedBlock : null}
+        ></div>
+        <h3 className="field-title">{this.props.title}</h3>
+        <ContentEditable
+          onBlur={this.toggleFocus.bind(this)}
+          onClick={this.updateAutocomplete.bind(this)}
+          onFocus={this.toggleFocus.bind(this)}
+          onKeyDown={this.toggleToken.bind(this)}
+          className="text-field"
+          innerRef={this.state.fieldRef}
+          onChange={this.handleTextInput.bind(this)}
+          html={this.state.html} // innerHTML of the editable div
+          disabled={false} // use true to disable editing
+        />
+        {this.state.showAutocomplete && (
+          <AutocompleteList
+            options={this.props.autocompleteOptions}
+            inputVal={this.state.tokenVal}
+            onSelect={this.autocompleteVal.bind(this)}
+            onCreate={this.createToken.bind(this)}
+          />
+        )}
+      </div>
+    );
+  }
 }

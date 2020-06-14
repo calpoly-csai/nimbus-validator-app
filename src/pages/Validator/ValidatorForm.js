@@ -8,6 +8,15 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
   let [isAnswerable, setAnswerable] = useState(
     query.isAnswerable ? "Yes" : "No"
   );
+  //TODO: Make this React controlled state when we actually fetch
+  let autocompleteOptions = [
+    "Professor",
+    "Major",
+    "Minor",
+    "Concentration",
+    "Location",
+    "Email",
+  ];
   let [questionType, setQuestionType] = useState(query.type);
   let [selectorOptions] = useState([
     { title: "Fact", value: "fact" },
@@ -56,12 +65,14 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
         value={query.question}
         onChange={setQuestion}
         queryId={query.id}
+        autocompleteOptions={autocompleteOptions}
       />
       <ValidatorField
         title="Answer"
         value={query.answer}
         onChange={setAnswer}
         queryId={query.id}
+        autocompleteOptions={autocompleteOptions}
       />
       <div className="query-properties">
         <ValidatorToggle

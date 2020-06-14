@@ -77,8 +77,8 @@
   position: relative;
   display: grid;
   grid-template-columns: auto auto;
-  grid-template-rows: auto auto;
-  grid-template-areas: "field-block field-title" "field-block field-input";
+  grid-template-rows: auto auto auto;
+  grid-template-areas: "field-block field-title" "field-block field-input" "field-block autocomplete";
   margin: 20px 0;
 
   .block {
@@ -218,4 +218,26 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.AutocompleteList {
+  grid-area: autocomplete;
+  list-style: none;
+  width: 100%;
+  overflow: hidden;
+  height: 30px;
+  margin: 5px 0 0 0;
+  padding-left: 5px;
+  li {
+    background: var(--backdrop);
+    border-radius: 5px;
+    display: inline-block;
+    margin: 0 10px;
+    cursor: pointer;
+    padding: 5px;
+  }
+  .add-token {
+    background: var(--confirm);
+    color: white;
+  }
 }
