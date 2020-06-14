@@ -13,33 +13,6 @@ export default class ValidatorField extends Component {
       transform: "scaleX(1.4) translateX(-2px)",
     };
 
-    // let changeFieldSelection = (i) => {
-    //   let range = document.createRange();
-    //   let sel = window.getSelection();
-    //   range.setStart(field.current.childNodes[0], i);
-    //   range.collapse(true);
-    //   sel.removeAllRanges();
-    //   sel.addRange(range);
-    // };
-
-    // let handleTextInput = (e) => {
-    //   let val = e.target.value;
-    //   if (e.nativeEvent.data === "{") {
-    //     val += "}";
-    //   }
-    //   console.log("val", val);
-    //   field.current = val;
-    //   // onChange("heelo" + val);
-    // };
-    // let evenTokens = value.length && value[0] === "{";
-    // let fieldContent = value.split(/[\{\}]/).map((section, i) => {
-    //   if ((evenTokens && !(i % 2)) || (!evenTokens && i % 2)) {
-    //     return <Token>{section}</Token>;
-    //   } else return section;
-    // });
-    // console.log("FieldContent:", field.current, value);
-    // if (field.current) field.current.innerHTML = "";
-
     return (
       <div className="ValidatorField">
         <div
@@ -52,17 +25,31 @@ export default class ValidatorField extends Component {
           onFocus={this.toggleFocus.bind(this)}
           onKeyDown={this.toggleToken.bind(this)}
           className="text-field"
+          innerRef={this.state.fieldRef}
           onChange={this.handleTextInput.bind(this)}
           html={this.state.html} // innerHTML of the editable div
-          innerRef={this.state.fieldRef}
           disabled={false} // use true to disable editing
         />
       </div>
     );
   }
 
+  componentDidMount() {
+    this.setState({ html: this.formatQueryHTML(this.props.value) });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.value === this.props.value) return;
+    let html = this.formatQueryHTML(this.props.value);
+    this.setState({ html });
+  }
+
+  formatQueryHTML(query) {
+    return query.replace(/\{/g, "<u>").replace(/\}/g, "</u>");
+  }
+
   toggleToken(e) {
-    let tokenKeys = /\{|\}|\bTab|\bEnter/;
+    let tokenKeys = /\{|\}|\bEnter/;
     if (!tokenKeys.test(e.key)) return;
     document.execCommand("underline");
     document.execCommand("insertText", true, " ");
@@ -74,6 +61,13 @@ export default class ValidatorField extends Component {
     this.setState((state) => ({
       isFocused: !state.isFocused,
     }));
+  }
+
+  formatHTML(innerHTML) {
+    return this.eliminateFontElement(innerHTML).replace(
+      /<u>&nbsp;(?=\w+)/g,
+      "<u>"
+    );
   }
 
   eliminateFontElement(innerHTML) {
@@ -91,7 +85,7 @@ export default class ValidatorField extends Component {
   }
 
   handleTextInput = (e) => {
-    let val = this.eliminateFontElement(e.target.value);
+    let val = this.formatHTML(e.target.value);
     this.setState({ html: val });
     val = val
       .replace(/<u>/g, "{")

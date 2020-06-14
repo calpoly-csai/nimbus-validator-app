@@ -4,7 +4,7 @@
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-rows: 120px min-content 50px;
+  grid-template-rows: 120px auto 70px;
   grid-template-columns: 1fr 1fr 1fr;
   row-gap: 20px;
   column-gap: 20px;
@@ -132,7 +132,7 @@
     display: flex;
     padding: 5px;
     margin: 0;
-    background: var(--backdrop);
+    background: var(--shadow);
     border-radius: 16px;
     list-style: none;
     overflow: hidden;
@@ -146,12 +146,13 @@
     }
 
     .selection-indicator {
-      transition: left 0.5s ease-out;
+      transition: left 0.5s ease-in-out;
       position: absolute;
       background: white;
-      top: 0;
+      padding: 10px;
+      top: -3%;
       left: 0;
-      height: 100%;
+      height: 106%;
       border-radius: 16px;
       z-index: 0;
     }
@@ -204,5 +205,17 @@
     width: 20px;
     height: 20px;
     transition: background 0.5s;
+
+    &.validated {
+      background: var(--confirm);
+      border-color: var(--confirm);
+    }
   }
+}
+
+.AllValidated {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

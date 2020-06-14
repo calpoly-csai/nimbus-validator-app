@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function ValidatorQueryNav({
-  bufferLength = 0,
+  queries = [],
   selectedIndex = 0,
   onChange,
 }) {
@@ -10,10 +10,11 @@ export default function ValidatorQueryNav({
     border: "2px solid var(--text)",
   };
   let queryNavButtons = [];
-  for (let i = 0; i < bufferLength; i++) {
+  for (let i = 0; i < queries.length; i++) {
+    let statusClass = queries[i].validated ? " validated" : "";
     queryNavButtons.push(
       <button
-        className="query-nav"
+        className={`query-nav${statusClass}`}
         style={i === selectedIndex ? selectedStyle : null}
         key={i}
         onClick={() => onChange(i)}
