@@ -23,22 +23,19 @@ function App() {
 
   return (
     <div className="page">
-      <div className="content">
-        <Switch>
-          <Route path="/signUp" exact component={SignUp} />
-          <Route path="/forgotPassword" exact component={ForgotPassword} />
-          <Route path="/login" exact component={Login} />
-          { signedIn && 
-            <Route path="/validator" exact component={Validator} />
+      <Switch>
+        <Route path="/signUp" exact component={SignUp} />
+        <Route path="/forgotPassword" exact component={ForgotPassword} />
+        <Route path="/login" exact component={Login} />
+        {signedIn && <Route path="/validator" exact component={Validator} />}
+        <Route
+          path="/"
+          exact
+          render={() =>
+            signedIn ? <Redirect to="/validator" /> : <Redirect to="/login" />
           }
-          <Route path="/" exact render={() => (
-                    signedIn ?
-                    <Redirect to="/validator" /> :
-                    <Redirect to="/login" />
-                )}
-          />
-        </Switch>
-      </div>
+        />
+      </Switch>
     </div>
   );
 }

@@ -7,6 +7,45 @@ body,
 #root {
   margin: 0;
   height: 100%;
+  //Color Pallette:
+  --shadow: #c3c7e2;
+  --text: #5d69b1;
+  --accent: #40c4ee;
+  --backdrop: #faf4ff;
+  --confirm: #53df8e;
+  --deny: #ff7b7b;
+}
+
+h1,
+h2 {
+  font-style: normal;
+  font-weight: bold;
+  color: var(--text);
+}
+
+h1 {
+  font-size: 40px;
+}
+
+h2 {
+  font-size: 30px;
+}
+
+button,
+select,
+input {
+  font-family: inherit;
+  color: var(--text);
+  font-size: 15px;
+}
+
+button {
+  cursor: pointer;
+  transition: transform 0.4s;
+
+  &:active {
+    transform: scale(0.97);
+  }
 }
 
 .page {

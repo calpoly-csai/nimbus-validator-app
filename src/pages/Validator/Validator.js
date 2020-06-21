@@ -1,64 +1,103 @@
 import React, { useState } from "react";
 import "./Validator.scss";
+import ValidatorForm from "./ValidatorForm";
+import TokenBar from "./TokenBar";
+import ValidatorQueryNav from "./ValidatorQueryNav";
+import AllValidated from "./AllValidated";
 
 import SignOut from "../../components/SignOut/SignOut";
 
 export default function Validator(props) {
-  let [isTokenizerShown, setIsTokenizerShown] = useState(true);
+  let maxQueryQueueSize = 10;
+  let [queries, setQueries] = useState([
+    {
+      question: "What is {Professor} email",
+      answer: "{Professor}  will communicate to you with his mind.",
+      type: "fact",
+      isAnswerable: false,
+      id: 1,
+      validated: false,
+    },
+    {
+      question: "Lorem {ipsum}",
+      answer: "something {else}",
+      type: "other",
+      isAnswerable: true,
+      id: 2,
+      validated: false,
+    },
+    {
+      question: "What is {Professor Braggarts} email",
+      answer: "Idk but he sure thinks he's {cool}.",
+      type: "related",
+      isAnswerable: false,
+      id: 3,
+      validated: false,
+    },
+  ]);
 
-  let tokenizer = (
-    <div className="tokenizer">
-      {" "}
-      <h1>Tokenizer</h1>
-      <button
-        className="primary"
-        onClick={() => {
-          setIsTokenizerShown((prev) => !prev);
-        }}
-      >
-        Edit Text
-      </button>
-    </div>
-  );
+  let [selectedIndex, setSelectedIndex] = useState(0);
 
-  let textEditor = (
-    <div className="text-editor">
-      <h3 className="field-label">Question</h3>
-      <div className="text-input" contentEditable="true"></div>
-      <h3 className="field-label">Answer</h3>
-      <div className="text-input" contentEditable="true"></div>
-      <div className="validator-buttons">
-        <button
-          className="primary"
-          onClick={() => {
-            setIsTokenizerShown((prev) => !prev);
-          }}
-        >
-          Edit Text
-        </button>
-        <button className="primary">Tokenize</button>
-        <button className="primary">Remove Question</button>
-      </div>
-      <div>
-        <select>
-          <option value="0">Select Label:</option>
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-        </select>
-      </div>
-    </div>
-  );
+  let deleteCurrentQuery = () => {
+    let updatedQueries = [...queries];
+    updatedQueries.splice(selectedIndex, 1);
+    if (queries.length < 3) fetchMoreQueries(3);
+    if (selectedIndex >= updatedQueries.length)
+      setSelectedIndex(updatedQueries.length - 1);
+    setQueries(updatedQueries);
+  };
+
+  let getNextQuery = (submittedQuery) => {
+    //update local version of the submitted query
+    let updatedQueries = [...queries];
+    submittedQuery.validated = true;
+    updatedQueries[selectedIndex] = submittedQuery;
+    setQueries(updatedQueries);
+
+    if (queries.length - 2 <= selectedIndex) fetchMoreQueries(1);
+
+    //Shift to next query
+    setSelectedIndex((i) => i + 1);
+  };
+
+  let fetchMoreQueries = (count) => {
+    console.log("fetching");
+    let dequeueCount = Math.max(count + queries.length - maxQueryQueueSize, 0);
+    let updatedQueries = queries.slice(dequeueCount);
+    //Actually fetch the queries here This is for testing purposes
+    let response = new Array(count).fill({
+      question: "This is from the {server}",
+      answer: "That is so {cool}",
+      type: "other",
+      isAnswerable: true,
+      id: 2,
+    });
+    //End test
+    response = response.map((query) => {
+      query.validated = false;
+      return query;
+    });
+    updatedQueries.push(...response);
+    setQueries(updatedQueries);
+    //Adjust the selected index
+    setSelectedIndex((i) => i - dequeueCount);
+  };
+  if (!queries.length) return <AllValidated />;
 
   return (
-    <div className="Validator">
-      <div className="signOut">
-        <SignOut />
-      </div>
-
-      <div className="validator-content">
-        <h1 className="title">Welcome to the Validator!</h1>
-        {isTokenizerShown ? tokenizer : textEditor}
-      </div>
+    <div className="ValidatorPage">
+      <h1 className="title">Validate</h1>
+      <ValidatorForm
+        query={queries[selectedIndex]}
+        onDelete={deleteCurrentQuery}
+        onSubmit={getNextQuery}
+      />
+      <TokenBar />
+      <ValidatorQueryNav
+        queries={queries}
+        selectedIndex={selectedIndex}
+        onChange={setSelectedIndex}
+      />
     </div>
   );
 }
