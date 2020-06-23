@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./Validator.scss";
 import ValidatorForm from "./ValidatorForm";
 import TokenBar from "./TokenBar";
