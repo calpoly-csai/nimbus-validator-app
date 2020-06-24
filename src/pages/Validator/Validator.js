@@ -41,10 +41,15 @@ export default function Validator(props) {
   let deleteCurrentQuery = () => {
     let updatedQueries = [...queries];
     updatedQueries.splice(selectedIndex, 1);
-    if (queries.length < 3) fetchMoreQueries(3);
+
+    // If we have fallen below 2 queries remaining, fetch 3 more.
+    if (updatedQueries.length < 2)
+      fetchMoreQueries(3, updatedQueries);
+    else
+      setQueries(updatedQueries);
+
     if (selectedIndex >= updatedQueries.length)
       setSelectedIndex(updatedQueries.length - 1);
-    setQueries(updatedQueries);
   };
 
   let getNextQuery = (submittedQuery) => {
@@ -52,18 +57,20 @@ export default function Validator(props) {
     let updatedQueries = [...queries];
     submittedQuery.validated = true;
     updatedQueries[selectedIndex] = submittedQuery;
-    setQueries(updatedQueries);
 
-    if (queries.length - 2 <= selectedIndex) fetchMoreQueries(1);
+    if (updatedQueries.length - 2 <= selectedIndex)
+      fetchMoreQueries(1, updatedQueries);
+    else
+      setQueries(updatedQueries);
 
     //Shift to next query
     setSelectedIndex((i) => i + 1);
   };
 
-  let fetchMoreQueries = (count) => {
+  let fetchMoreQueries = (count, currentQueries) => {
     console.log("fetching");
-    let dequeueCount = Math.max(count + queries.length - maxQueryQueueSize, 0);
-    let updatedQueries = queries.slice(dequeueCount);
+    let dequeueCount = Math.max(count + currentQueries.length - maxQueryQueueSize, 0);
+    let updatedQueries = currentQueries.slice(dequeueCount);
     //Actually fetch the queries here This is for testing purposes
     let response = new Array(count).fill({
       question: "This is from the {server}",
