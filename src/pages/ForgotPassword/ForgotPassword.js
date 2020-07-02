@@ -43,7 +43,7 @@ export default function ForgotPassword(props) {
           </button>
         </form>
         <div className="acccount-links">
-          <Link className="link" to="/">Back to Log In</Link>
+          <Link className="link" to="/login">Back to Log In</Link>
         </div>
       </div>
     </div>
