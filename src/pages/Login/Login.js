@@ -5,6 +5,7 @@ import { auth } from "../../firebase";
 import "./Login.scss";
 import TextField from "../../components/TextField/TextField";
 import { isEmail } from "../../modules/validators";
+import cpcsaiLogo from '../../assets/cpcsai_blackfull.png';
 
 export default function Login(props) {
   let [username, setUsername] = useState("");
@@ -30,17 +31,18 @@ export default function Login(props) {
   return (
     <div className="Login">
       <div className="account-container">
+        <img className="cpcsaiLogo" src={cpcsaiLogo} alt="cpcsaiLogo"/>
         <div className="account-title">
-          <h2>Log In</h2>
-          <div className="header-hr"></div>
+          <h2>Login</h2>
         </div>
         <form onSubmit={logInUser}>
           <TextField
             type="text"
-            placeholder="Username"
+            placeholder="Email"
             onChange={setUsername}
             value={username}
             validator={(value) => value && isEmail(value)}
+            icon="person-outline"
           />
           <TextField
             type="password"
@@ -48,9 +50,10 @@ export default function Login(props) {
             onChange={setPassword}
             value={password}
             validator={(value) => value && value.length > 7}
+            icon="lock-closed-outline"
           />
           <button className="submit-button" type="submit">
-            Log In
+            Login
           </button>
         </form>
         <div className="acccount-links">

@@ -4,6 +4,8 @@ import TextField from "../../components/TextField/TextField";
 import "./SignUp.scss";
 import { auth } from "../../firebase";
 import { isEmail } from "../../modules/validators";
+import cpcsaiLogo from '../../assets/cpcsai_blackfull.png';
+
 export default function SignUp(props) {
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
@@ -31,9 +33,9 @@ export default function SignUp(props) {
   return (
     <div className="SignUp">
       <div className="account-container">
+        <img className="cpcsaiLogo" src={cpcsaiLogo} alt="cpcsaiLogo"/>
         <div className="account-title">
           <h2>Sign Up</h2>
-          <div className="header-hr"></div>
         </div>
         <form onSubmit={signUp}>
           <TextField
@@ -41,24 +43,28 @@ export default function SignUp(props) {
             placeholder="Email"
             onChange={setEmail}
             value={email}
+            icon="person-outline"
           />
           <TextField
             type="password"
             placeholder="Password"
             onChange={setPassword}
             value={password}
+            icon="lock-closed-outline"
           />
           <TextField
             type="password"
             placeholder="Confirm Password"
             onChange={setConfirmPassword}
             value={confirmPassword}
+            icon="lock-closed-outline"
           />
           <TextField
             type="password"
             placeholder="Entry Code"
             onChange={setEntryCode}
             value={entryCode}
+            icon="key-outline"
           />
           <button className="submit-button" type="submit">
             Register
@@ -66,7 +72,7 @@ export default function SignUp(props) {
         </form>
         <div className="acccount-links">
           <Link className="link" to="/login">
-            Already have an account? Log In
+            Already have an account? Login
           </Link>
         </div>
       </div>
