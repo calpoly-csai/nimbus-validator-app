@@ -31,7 +31,9 @@ export default function Login(props) {
   return (
     <div className="Login">
       <div className="account-container">
-        <img className="cpcsaiLogo" src={cpcsaiLogo} alt="cpcsaiLogo"/>
+        <Link to="/login">
+          <img className="cpcsaiLogo" src={cpcsaiLogo} alt="cpcsaiLogo"/>
+        </Link>
         <div className="account-title">
           <h2>Login</h2>
         </div>

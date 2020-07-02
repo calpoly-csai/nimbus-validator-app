@@ -26,7 +26,9 @@ export default function ForgotPassword(props) {
   return (
     <div className="ForgotPassword">
       <div className="account-container">
-        <img className="cpcsaiLogo" src={cpcsaiLogo} alt="cpcsaiLogo"/>
+        <Link to="/login">
+          <img className="cpcsaiLogo" src={cpcsaiLogo} alt="cpcsaiLogo"/>
+        </Link>
         <div className="account-title">
           <h2>Reset Password</h2>
         </div>
