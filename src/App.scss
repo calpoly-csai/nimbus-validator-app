@@ -128,13 +128,7 @@ button {
       &:hover {
         color: white;
         border: none;
-        background: rgb(113, 204, 217);
-        background: linear-gradient(
-          135deg,
-          rgba(113, 204, 217, 1) 0%,
-          rgba(128, 85, 162, 1) 65%,
-          rgba(128, 85, 162, 1) 100%
-        );
+        background: var(--accent);
       }
     }
     &:active {
