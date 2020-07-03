@@ -22,11 +22,11 @@ export default class ValidatorField extends Component {
   }
 
   formatQueryHTML(query) {
-    return query.replace(/\{/g, "<u>").replace(/\}/g, "</u>");
+    return query.replace(/\[/g, "<u>").replace(/\]/g, "</u>");
   }
 
   toggleToken(e) {
-    let tokenKeys = /\{|\}|\bEnter/;
+    let tokenKeys = /\[|\]|\bEnter/;
     if (!tokenKeys.test(e.key)) return;
     document.execCommand("underline");
     document.execCommand("insertText", true, " ");
@@ -87,8 +87,8 @@ export default class ValidatorField extends Component {
     this.setState({ html: val });
     this.updateAutocomplete();
     val = val
-      .replace(/<u>/g, "{")
-      .replace(/<\/u>/g, "}")
+      .replace(/<u>/g, "[")
+      .replace(/<\/u>/g, "]")
       .replace(/&nbsp;/g, "");
     this.props.onChange(val);
   };
