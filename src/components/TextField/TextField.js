@@ -28,7 +28,8 @@ export default function TextField(props) {
         {props.placeholder}
       </p>
       <div className="field-container">
-        <ion-icon name={props.icon}></ion-icon>
+        <ion-icon name={props.icon} className="icon" style={{fontSize: "40px"}}>
+        </ion-icon>
         <input
           type={props.type}
           placeholder={props.placeholder}
