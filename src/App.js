@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { auth } from "./firebase";
+import "./axios";
 
 import "./App.scss";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
