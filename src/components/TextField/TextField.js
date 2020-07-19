@@ -20,22 +20,26 @@ export default function TextField(props) {
   }
 
   if (!isValid) {
-    errorStyle = { border: "3px solid red" };
+    errorStyle = { borderBottom: "2px solid var(--deny)" };
   }
   return (
     <div className="TextField">
       <p className="label" style={labelStyle}>
         {props.placeholder}
       </p>
-      <input
-        type={props.type}
-        placeholder={props.placeholder}
-        style={errorStyle}
-        className="input-field"
-        onChange={(e) => props.onChange(e.target.value)}
-        onBlur={validate}
-        value={props.value}
-      />
+      <div className="field-container">
+        <ion-icon name={props.icon} className="icon" style={{fontSize: "40px"}}>
+        </ion-icon>
+        <input
+          type={props.type}
+          placeholder={props.placeholder}
+          style={errorStyle}
+          className="input-field"
+          onChange={(e) => props.onChange(e.target.value)}
+          onBlur={validate}
+          value={props.value}
+        />
+      </div>
     </div>
   );
 }
