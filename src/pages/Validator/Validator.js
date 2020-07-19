@@ -8,8 +8,6 @@ import axios from "axios";
 
 import SignOut from "../../components/SignOut/SignOut";
 
-const baseUrl = "http://0.0.0.0:8080";
-
 export default function Validator(props) {
   let maxQueryQueueSize = 10;
   let [queries, setQueries] = useState([]);
@@ -20,7 +18,7 @@ export default function Validator(props) {
     updatedQueries.splice(selectedIndex, 1);
 
     // delete query in database
-    axios.post(`${baseUrl}/new_data/delete_phrase`);
+    axios.post(`/new_data/delete_phrase`);
 
     // If we have fallen below 2 queries remaining, fetch 3 more.
     if (updatedQueries.length < 2) await fetchMoreQueries(3, updatedQueries);
@@ -45,7 +43,7 @@ export default function Validator(props) {
       answer: submittedQuery.answer,
       verified: true,
     };
-    let response = await axios.post(`${baseUrl}/new_data/update_phrase`, data);
+    let response = await axios.post(`/new_data/update_phrase`, data);
 
     if (updatedQueries.length - 2 <= selectedIndex)
       await fetchMoreQueries(1, updatedQueries);
@@ -63,7 +61,7 @@ export default function Validator(props) {
     );
     let updatedQueries = currentQueries.slice(dequeueCount);
     // TODO: get the actual server address
-    let response = await axios.get(`${baseUrl}/data/get_phrase/${count}`);
+    let response = await axios.get(`/data/get_phrase/${count}`);
     response = response.data.data.map((query) => {
       return {
         question: query.question_format,
