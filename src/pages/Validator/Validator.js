@@ -6,8 +6,6 @@ import ValidatorQueryNav from "./ValidatorQueryNav";
 import AllValidated from "./AllValidated";
 import axios from "axios";
 
-import SignOut from "../../components/SignOut/SignOut";
-
 export default function Validator(props) {
   let maxQueryQueueSize = 10;
   let [queries, setQueries] = useState([]);
@@ -34,13 +32,16 @@ export default function Validator(props) {
     submittedQuery.validated = true;
     updatedQueries[selectedIndex] = submittedQuery;
 
+    // regex to remove anything between HTML entities (potential HTML elements)
+    let regex = /&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});.*&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});/gi;
+
     // update query in the database
     let data = {
       id: submittedQuery.id,
-      isAnswerable: submittedQuery.isAnswerable == "No" ? false : true,
+      isAnswerable: submittedQuery.isAnswerable === "No" ? false : true,
       type: submittedQuery.type,
-      question: submittedQuery.question,
-      answer: submittedQuery.answer,
+      question: submittedQuery.question.replace(regex, ""),
+      answer: submittedQuery.answer.replace(regex, ""),
       verified: true,
     };
     let response = await axios.post(`/new_data/update_phrase`, data);
