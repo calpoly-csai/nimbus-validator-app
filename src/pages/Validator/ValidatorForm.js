@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import ValidatorField from "./ValidatorField";
 import ValidatorToggle from "./ValidatorToggle";
 import ValidatorSelector from "./ValidatorSelector";
+import axios from 'axios';
+
 export default function ValidatorForm({ query, onDelete, onSubmit }) {
   let [question, setQuestion] = useState(query.question);
   let [answer, setAnswer] = useState(query.answer);
@@ -9,14 +11,7 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
     query.isAnswerable ? "Yes" : "No"
   );
   //TODO: Make this React controlled state when we actually fetch
-  let autocompleteOptions = [
-    "Professor",
-    "Major",
-    "Minor",
-    "Concentration",
-    "Location",
-    "Email",
-  ];
+  let [autoCompleteOptions, setautoCompleteOptions] = useState(null);
   let [questionType, setQuestionType] = useState(query.type);
   let [selectorOptions] = useState([
     { title: "Fact", value: "fact" },
@@ -24,6 +19,13 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
     { title: "Statistics", value: "statistics" },
     { title: "Other", value: "other" },
   ]);
+  let fetchAutoComplete = async () => {
+    let {data} = await axios.get('/entity_structure');
+    setautoCompleteOptions(Object.keys(data));
+    console.log(data)
+  };
+  useEffect(fetchAutoComplete, []);
+
   /** When Query changes, update the internal state of the form */
   let updateQueryState = () => {
     setQuestion(query.question);
@@ -65,14 +67,14 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
         value={query.question}
         onChange={setQuestion}
         queryId={query.id}
-        autocompleteOptions={autocompleteOptions}
+        autocompleteOptions={autoCompleteOptions}
       />
       <ValidatorField
         title="Answer"
         value={query.answer}
         onChange={setAnswer}
         queryId={query.id}
-        autocompleteOptions={autocompleteOptions}
+        autocompleteOptions={autoCompleteOptions}
       />
       <div className="query-properties">
         <ValidatorToggle
