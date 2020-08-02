@@ -22,7 +22,7 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
   /** Fetch autcomplete information for tokens */
   let fetchAutoComplete = async () => {
     let { data } = await axios.get('/entity_structure');
-    setautoCompleteOptions(Object.keys(data));
+    setautoCompleteOptions(Object.keys(data).map(s => s.toUpperCase()));
     buildEntityMatchingDict(data);
   };
   useEffect(fetchAutoComplete, []);
