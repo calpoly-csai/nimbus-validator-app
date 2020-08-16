@@ -2,21 +2,16 @@ import React, { useState, useEffect, useCallback } from "react";
 import ValidatorField from "./ValidatorField";
 import ValidatorToggle from "./ValidatorToggle";
 import ValidatorSelector from "./ValidatorSelector";
+import axios from 'axios';
+
 export default function ValidatorForm({ query, onDelete, onSubmit }) {
   let [question, setQuestion] = useState(query.question);
   let [answer, setAnswer] = useState(query.answer);
   let [isAnswerable, setAnswerable] = useState(
     query.isAnswerable ? "Yes" : "No"
   );
-  //TODO: Make this React controlled state when we actually fetch
-  let autocompleteOptions = [
-    "Professor",
-    "Major",
-    "Minor",
-    "Concentration",
-    "Location",
-    "Email",
-  ];
+  let [autoCompleteOptions, setautoCompleteOptions] = useState(null);
+  let [entityMatchingDict, setEntityMatchingDict] = useState(null);
   let [questionType, setQuestionType] = useState(query.type);
   let [selectorOptions] = useState([
     { title: "Fact", value: "fact" },
@@ -24,6 +19,29 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
     { title: "Statistics", value: "statistics" },
     { title: "Other", value: "other" },
   ]);
+  /** Fetch autcomplete information for tokens */
+  let fetchAutoComplete = async () => {
+    let { data } = await axios.get('/entity_structure');
+    setautoCompleteOptions(Object.keys(data).map(s => s.toUpperCase()));
+    buildEntityMatchingDict(data);
+  };
+  useEffect(fetchAutoComplete, []);
+
+  /**
+   * Builds a dictionary mapping entities and their synonyms to their correct entity
+   */
+  let buildEntityMatchingDict = (entities) => {
+    let entityMatchingDict = {};
+    for (let entity in entities) {
+      entityMatchingDict[entity] = entity
+      for (let syn of entities[entity]['synonyms']) {
+        entityMatchingDict[syn] = entity;
+      }
+    }
+    setEntityMatchingDict(entityMatchingDict);
+  }
+
+
   /** When Query changes, update the internal state of the form */
   let updateQueryState = () => {
     setQuestion(query.question);
@@ -65,14 +83,14 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
         value={query.question}
         onChange={setQuestion}
         queryId={query.id}
-        autocompleteOptions={autocompleteOptions}
+        entityMatchingDict={entityMatchingDict}
       />
       <ValidatorField
         title="Answer"
         value={query.answer}
         onChange={setAnswer}
         queryId={query.id}
-        autocompleteOptions={autocompleteOptions}
+        entityMatchingDict={entityMatchingDict}
       />
       <div className="query-properties">
         <ValidatorToggle
