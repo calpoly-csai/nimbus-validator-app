@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import './LoginHero.scss';
 
-const dist = 250
+const dist = 400
 
 function randomDist() {
     return `${(Math.random() * 2 - 1) * dist}px`

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./ForgotPassword.scss";
 import { auth } from "../../firebase";
 import TextField from "../../components/TextField/TextField";
+import LoginHero from "../../components/LoginHero/LoginHero";
 import { isEmail } from "../../modules/validators";
 import cpcsaiLogo from '../../assets/cpcsai_blackfull.png';
 
@@ -50,6 +51,7 @@ export default function ForgotPassword(props) {
           <Link className="link" to="/login">Back to Login</Link>
         </div>
       </div>
+      <LoginHero />
     </div>
   )
 }
