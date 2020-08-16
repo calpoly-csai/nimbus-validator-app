@@ -4,6 +4,7 @@ import { auth } from "../../firebase";
 
 import "./Login.scss";
 import TextField from "../../components/TextField/TextField";
+import LoginHero from "../../components/LoginHero/LoginHero";
 import { isEmail } from "../../modules/validators";
 import cpcsaiLogo from '../../assets/cpcsai_blackfull.png';
 
@@ -32,7 +33,7 @@ export default function Login(props) {
     <div className="Login">
       <div className="account-container">
         <Link to="/login">
-          <img className="cpcsaiLogo" src={cpcsaiLogo} alt="cpcsaiLogo"/>
+          <img className="cpcsaiLogo" src={cpcsaiLogo} alt="cpcsaiLogo" />
         </Link>
         <div className="account-title">
           <h2>Login</h2>
@@ -63,6 +64,7 @@ export default function Login(props) {
           <Link className="link" to="/signUp">New here? Sign Up</Link>
         </div>
       </div>
+      <LoginHero />
     </div>
   );
 }
