@@ -8,7 +8,12 @@ function randomDist(dist) {
 }
 
 export default function LoginHero() {
-    let messages = ["Hello Nimbus", "Welcome to CSAI", "Check us out on Github"];
+    let messages = ["Hello Nimbus",
+                    "Nimbus, consider yourself validated",
+                    "Nimbus, what is CSAI?",
+                    "Nimbus, take me to your data",
+                    "Let's clean some data",
+                    "CS + AI = best club ever"];
     let index = Math.floor(Math.random() * messages.length)
     let messageRef = useRef(null)
     let currentMessage = messages[index].split('').map((char, i) => <span className='letter' style={{
@@ -30,6 +35,7 @@ export default function LoginHero() {
                 `translate(0, 0)`],
                 opacity: ['0.2', '1']
             }
+            // easing function: easeInOutSine https://easings.net/#easeInOutSine
             letter.animate(keyframes, { duration: 4000, easing: 'cubic-bezier(0.37, 0, 0.63, 1)' })
         })
     }
