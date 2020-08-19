@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import './LoginHero.scss';
 
-const dist = 400
+const d = 300
 
-function randomDist() {
-    return `${(Math.random() * 2 - 1) * dist}px`
+function randomDist(dist) {
+    return (Math.random() * 2 - 1) * dist
 }
 
 export default function LoginHero() {
-    let messages = ["Hello Nimbus"];
-    let index = 0
+    let messages = ["Hello Nimbus", "Welcome to CSAI", "Check us out on Github"];
+    let index = Math.floor(Math.random() * messages.length)
     let messageRef = useRef(null)
     let currentMessage = messages[index].split('').map((char, i) => <span className='letter' style={{
         display: `${char === ' ' ? 'initial' : ''}`
@@ -20,11 +20,17 @@ export default function LoginHero() {
         letters.forEach(letter => {
             // animate each individual span element (character)
             let keyframes = {
-                transform: [`translate(${randomDist()}, ${randomDist()})`,
-                    `translate(0, 0)`],
+                transform: [`translate(${1 * randomDist(d)}px, ${1 * randomDist(d)}px)`, 
+                `translate(${0.8911 * randomDist(d)}px, ${0.8911 * randomDist(d)}px)`,
+                `translate(${0.5644 * randomDist(d)}px, ${0.5644 * randomDist(d)}px)`,
+                `translate(${0.0299 * randomDist(d)}px, ${0.0199 * randomDist(d)}px)`,
+                `translate(${0.0066 * randomDist(d)}px, ${0.0066 * randomDist(d)}px)`,
+                `translate(${0.0163 * randomDist(d)}px, ${0.0163 * randomDist(d)}px)`,
+                `translate(${0.0154 * randomDist(d)}px, ${0.0154 * randomDist(d)}px)`,
+                `translate(0, 0)`],
                 opacity: ['0.2', '1']
             }
-            letter.animate(keyframes, { duration: 2000 })
+            letter.animate(keyframes, { duration: 4000, easing: 'cubic-bezier(0.37, 0, 0.63, 1)' })
         })
     }
 
