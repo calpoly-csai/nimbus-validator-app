@@ -28,17 +28,12 @@ export default function LoginHero() {
             // animate each individual span element (character)
             let keyframes = {
                 transform: [
-                `translate(${0.8911 * randomDist(d)}px, ${0.8911 * randomDist(d)}px)`,
-                `translate(${0.5644 * randomDist(d)}px, ${0.5644 * randomDist(d)}px)`,
-                `translate(${0.0299 * randomDist(d)}px, ${0.0199 * randomDist(d)}px)`,
-                `translate(${0.0066 * randomDist(d)}px, ${0.0066 * randomDist(d)}px)`,
-                `translate(${0.0163 * randomDist(d)}px, ${0.0163 * randomDist(d)}px)`,
-                `translate(${0.0154 * randomDist(d)}px, ${0.0154 * randomDist(d)}px)`,
+                `translate(${randomDist(d)}px, ${randomDist(d)}px)`,
                 'translate(0, 0)'],
                 opacity: ['0.2', '1']
             };
-            // easing function: easeInOutSine https://easings.net/#easeInOutSine
-            letter.animate(keyframes, { duration: 4000, easing: 'cubic-bezier(0.37, 0, 0.63, 1)', delay: delay});
+            // easing: easInOutBack from https://easings.net/#easeInOutBack
+            letter.animate(keyframes, { duration: 1000, easing: 'cubic-bezier(0.68, -0.6, 0.32, 1.6)', delay: delay});
             setTimeout(() => {letter.style.opacity = 1}, delay + 100);
             i++;
         });
