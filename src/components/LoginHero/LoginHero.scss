@@ -1,0 +1,29 @@
+.LoginHero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-weight: 800;
+
+  .title {
+    font-size: 50px;
+    margin-top: 10vh;
+  }
+
+  .message {
+    padding: 7px 15px;
+    background: white;
+    border-radius: 8px;
+    color: var(--accent);
+    font-family: "Courier New", Courier, monospace;
+    width: max-content;
+    margin-top: 25vh;
+
+    .letter {
+      display: inline-block;
+      font-size: 32px;
+      opacity: 0;
+    }
+  }
+}

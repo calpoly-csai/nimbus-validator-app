@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import TextField from "../../components/TextField/TextField";
+import LoginHero from "../../components/LoginHero/LoginHero";
 import "./SignUp.scss";
 import { auth } from "../../firebase";
 import { isEmail } from "../../modules/validators";
@@ -78,6 +79,7 @@ export default function SignUp(props) {
           </Link>
         </div>
       </div>
+      <LoginHero />
     </div>
   );
 }
