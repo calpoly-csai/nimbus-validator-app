@@ -11,8 +11,6 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
     query.isAnswerable ? "Yes" : "No"
   );
   let [entities, setEntities] = useState(null);
-  let [autoCompleteOptions, setautoCompleteOptions] = useState(null);
-  let [entityMatchingDict, setEntityMatchingDict] = useState(null);
   let [questionType, setQuestionType] = useState(query.type);
   let [selectorOptions] = useState([
     { title: "Fact", value: "fact" },
@@ -23,26 +21,9 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
   /** Fetch autcomplete information for tokens */
   let fetchAutoComplete = async () => {
     let { data } = await axios.get('/entity_structure');
-    setautoCompleteOptions(Object.keys(data).map(s => s.toUpperCase()));
-    buildEntityMatchingDict(data);
     setEntities(data);
   };
   useEffect(() => { fetchAutoComplete(); }, []);
-
-  /**
-   * Builds a dictionary mapping entities and their synonyms to their correct entity
-   */
-  let buildEntityMatchingDict = (entities) => {
-    let entityMatchingDict = {};
-    for (let entity in entities) {
-      entityMatchingDict[entity] = entity
-      for (let syn of entities[entity]['synonyms']) {
-        entityMatchingDict[syn] = entity;
-      }
-    }
-    setEntityMatchingDict(entityMatchingDict);
-  }
-
 
   /** When Query changes, update the internal state of the form */
   let updateQueryState = () => {
@@ -85,7 +66,6 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
         value={query.question}
         onChange={setQuestion}
         queryId={query.id}
-        entityMatchingDict={entityMatchingDict}
         entities={entities}
       />
       <ValidatorField
@@ -93,7 +73,6 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
         value={query.answer}
         onChange={setAnswer}
         queryId={query.id}
-        entityMatchingDict={entityMatchingDict}
         entities={entities}
       />
       <div className="query-properties">

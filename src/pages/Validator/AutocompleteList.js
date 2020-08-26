@@ -2,7 +2,6 @@ import React from "react";
 
 export default function AutocompleteList({
   entities = {},
-  synonyms = {},
   showAttributes,
   inputVal,
   onSelect,
@@ -22,6 +21,14 @@ export default function AutocompleteList({
    */
   let listSynonyms = () => {
     let entitiesSeen = [];
+    // Map entities and their synonyms to their correct entity
+    let synonyms = {};
+    for (let entity in entities) {
+      synonyms[entity] = entity
+      for (let syn of entities[entity]['synonyms']) {
+        synonyms[syn] = entity;
+      }
+    }
     return (
       Object.keys(synonyms)
       .filter(entity => entity.toUpperCase().startsWith(inputVal.toUpperCase()))

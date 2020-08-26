@@ -146,7 +146,6 @@ export default class ValidatorField extends Component {
         {this.state.showAutocomplete && (
           <AutocompleteList
             entities={this.props.entities}
-            synonyms={this.props.entityMatchingDict}
             showAttributes={this.showAttributes()}
             inputVal={this.state.tokenVal}
             onSelect={this.autocompleteVal.bind(this)}
