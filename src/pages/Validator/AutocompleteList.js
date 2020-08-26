@@ -24,7 +24,7 @@ export default function AutocompleteList({
     // Map entities and their synonyms to their correct entity
     let synonyms = {};
     for (let entity in entities) {
-      synonyms[entity] = entity
+      synonyms[entity] = entity;
       for (let syn of entities[entity]['synonyms']) {
         synonyms[syn] = entity;
       }
@@ -39,7 +39,7 @@ export default function AutocompleteList({
             <li key={entity} onClick={handleSelect.bind(this, synonyms[entity])} >
               {synonyms[entity]}
             </li >
-          )
+          );
         }
       })
     );
@@ -52,7 +52,7 @@ export default function AutocompleteList({
     let entity = showAttributes;
     let inputAttr = inputVal.match(/(?<=\.).*/);
     if(!entities[entity]){
-      return
+      return;
     }
     return entities[entity]['attributes']
       .filter((attr) => attr.includes(inputAttr))
@@ -61,8 +61,8 @@ export default function AutocompleteList({
         <li key={attr} onClick={handleSelect.bind(this, `${entity}.${attr}`)} >
           {attr}
         </li >
-      )
-    })
+      );
+    });
   }
 
   let showOptions = showAttributes ? listAttributes() : listSynonyms();
