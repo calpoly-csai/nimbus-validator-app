@@ -22,7 +22,9 @@ export default class ValidatorField extends Component {
   }
 
   formatQueryHTML(query) {
-    return query.replace(/\[/g, "<u>").replace(/\]/g, "</u>");
+    return query.replace(/\[/g, "<u>")
+                .replace(/\]/g, "</u>")
+                .replace(/\.\./g, ".");
   }
 
   toggleToken(e) {
@@ -102,10 +104,18 @@ export default class ValidatorField extends Component {
     let val = this.formatHTML(e.target.value);
     this.setState({ html: val });
     this.updateAutocomplete();
+    // Reformat phrase to meet database standards
+    // (e.g. braces, double dot, spacing)
     val = val
       .replace(/<u>/g, "[")
       .replace(/<\/u>/g, "]")
       .replace(/&nbsp;/g, "");
+    let dotInToken = /(?<!\.)\.(?!\.)[^\.\[\]]*\]/g;
+    let match = dotInToken.exec(val);
+    while (match) {
+      val = val.slice(0, match.index) + "." + val.slice(match.index);
+      match = dotInToken.exec(val);
+    }
     this.props.onChange(val);
   };
 
