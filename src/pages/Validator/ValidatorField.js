@@ -78,6 +78,22 @@ export default class ValidatorField extends Component {
     this.setState({ html: updatedContent });
   }
 
+  /**
+   * Indicates whether attributes should be shown, and for which entity.
+   * If the name of an entity exists at the start of the token and is followed 
+   * by a dot, returns that entities name. Else, returns empty string.
+   */
+  showAttributes() {
+    const {tokenVal} = this.state;
+    for (let entity in this.props.entities) {
+      let regex = new RegExp(`^${entity}\..*`);
+      if (regex.test(tokenVal)) {
+        return tokenVal.match(regex)[0].slice(0, entity.length);
+      }
+    }
+    return "";
+  }
+
   createToken(title) {
     console.log("Create a token with title", title);
   }
@@ -119,7 +135,9 @@ export default class ValidatorField extends Component {
         />
         {this.state.showAutocomplete && (
           <AutocompleteList
-            entities={this.props.entityMatchingDict}
+            entities={this.props.entities}
+            synonyms={this.props.entityMatchingDict}
+            showAttributes={this.showAttributes()}
             inputVal={this.state.tokenVal}
             onSelect={this.autocompleteVal.bind(this)}
             onCreate={this.createToken.bind(this)}

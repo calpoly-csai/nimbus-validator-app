@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import ValidatorField from "./ValidatorField";
 import ValidatorToggle from "./ValidatorToggle";
 import ValidatorSelector from "./ValidatorSelector";
@@ -10,6 +10,7 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
   let [isAnswerable, setAnswerable] = useState(
     query.isAnswerable ? "Yes" : "No"
   );
+  let [entities, setEntities] = useState(null);
   let [autoCompleteOptions, setautoCompleteOptions] = useState(null);
   let [entityMatchingDict, setEntityMatchingDict] = useState(null);
   let [questionType, setQuestionType] = useState(query.type);
@@ -24,8 +25,9 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
     let { data } = await axios.get('/entity_structure');
     setautoCompleteOptions(Object.keys(data).map(s => s.toUpperCase()));
     buildEntityMatchingDict(data);
+    setEntities(data);
   };
-  useEffect(fetchAutoComplete, []);
+  useEffect(() => { fetchAutoComplete(); }, []);
 
   /**
    * Builds a dictionary mapping entities and their synonyms to their correct entity
@@ -84,6 +86,7 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
         onChange={setQuestion}
         queryId={query.id}
         entityMatchingDict={entityMatchingDict}
+        entities={entities}
       />
       <ValidatorField
         title="Answer"
@@ -91,6 +94,7 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
         onChange={setAnswer}
         queryId={query.id}
         entityMatchingDict={entityMatchingDict}
+        entities={entities}
       />
       <div className="query-properties">
         <ValidatorToggle
