@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 export default function AutocompleteList({
   entities = {},
-  showAttributes,
+  entityName,
   inputVal,
   onSelect,
-  onCreate,
+  onCreateEntity
 }) {
+  // Map entities and their synonyms to their correct entity
+  const synonyms = useMemo(() => {
+    let synonymEntityMapping = {};
+    for (let entity in entities) {
+      synonymEntityMapping[entity] = entity;
+      for (let syn of entities[entity]['synonyms']) {
+        synonymEntityMapping[syn] = entity;
+      }
+    }
+    return synonymEntityMapping;
+  }, [entities]);
+
   /*
    * Inserts token into the UI, replacing whatever text the user already wrote 
    * in the token
@@ -20,24 +32,16 @@ export default function AutocompleteList({
    * Returns a list of synonym autocomplete options, filtered by the input
    */
   let listSynonyms = () => {
-    let entitiesSeen = [];
-    // Map entities and their synonyms to their correct entity
-    let synonyms = {};
-    for (let entity in entities) {
-      synonyms[entity] = entity;
-      for (let syn of entities[entity]['synonyms']) {
-        synonyms[syn] = entity;
-      }
-    }
+    let entitiesMatched = new Set();
     return (
       Object.keys(synonyms)
-      .filter(entity => entity.toUpperCase().startsWith(inputVal.toUpperCase()))
-      .map((entity) => {
-        if (!entitiesSeen.includes(synonyms[entity])) {
-          entitiesSeen.push(synonyms[entity])
+      .filter(syn => syn.toUpperCase().startsWith(inputVal.toUpperCase()))
+      .map(syn => {
+        if (!entitiesMatched.has(synonyms[syn])) {
+          entitiesMatched.add(synonyms[syn]);
           return (
-            <li key={entity} onClick={handleSelect.bind(this, synonyms[entity])} >
-              {synonyms[entity]}
+            <li key={syn} onClick={handleSelect.bind(this, synonyms[syn])} >
+              {synonyms[syn]}
             </li >
           );
         }
@@ -49,7 +53,7 @@ export default function AutocompleteList({
    * Returns a list of attribute autocomplete options, filtered by the input
    */
   let listAttributes = () => {
-    let entity = showAttributes;
+    let entity = entityName;
     let inputAttr = inputVal.match(/(?<=\.).*/);
     if(!entities[entity]){
       return;
@@ -65,7 +69,7 @@ export default function AutocompleteList({
     });
   }
 
-  let showOptions = showAttributes ? listAttributes() : listSynonyms();
+  let showOptions = entityName ? listAttributes() : listSynonyms();
 
   /* 
    * Render the list of tokens, if not display an add token button
@@ -75,7 +79,7 @@ export default function AutocompleteList({
       {showOptions.length ? (
         showOptions
       ) : (
-          <li className="add-token" onClick={() => onCreate(inputVal)}>
+          <li className="add-token" onClick={() => onCreateEntity(inputVal)}>
             Add Token
           </li>
         )}

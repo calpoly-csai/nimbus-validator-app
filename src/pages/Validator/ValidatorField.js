@@ -85,7 +85,7 @@ export default class ValidatorField extends Component {
    * If the name of an entity exists at the start of the token and is followed 
    * by a dot, returns that entities name. Else, returns empty string.
    */
-  showAttributes() {
+  getEntityFromToken() {
     const {tokenVal} = this.state;
     for (let entity in this.props.entities) {
       let regex = new RegExp(`^${entity}\..*`);
@@ -146,10 +146,10 @@ export default class ValidatorField extends Component {
         {this.state.showAutocomplete && (
           <AutocompleteList
             entities={this.props.entities}
-            showAttributes={this.showAttributes()}
+            entityName={this.getEntityFromToken()}
             inputVal={this.state.tokenVal}
             onSelect={this.autocompleteVal.bind(this)}
-            onCreate={this.createToken.bind(this)}
+            onCreateEntity={this.createToken.bind(this)}
           />
         )}
       </div>
