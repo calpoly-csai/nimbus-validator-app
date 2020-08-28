@@ -22,7 +22,9 @@ export default class ValidatorField extends Component {
   }
 
   formatQueryHTML(query) {
-    return query.replace(/\[/g, "<u>").replace(/\]/g, "</u>");
+    return query.replace(/\[/g, "<u>")
+                .replace(/\]/g, "</u>")
+                .replace(/\.\./g, ".");
   }
 
   toggleToken(e) {
@@ -78,6 +80,22 @@ export default class ValidatorField extends Component {
     this.setState({ html: updatedContent });
   }
 
+  /**
+   * Indicates whether attributes should be shown, and for which entity.
+   * If the name of an entity exists at the start of the token and is followed 
+   * by a dot, returns that entities name. Else, returns empty string.
+   */
+  getEntityFromToken() {
+    const {tokenVal} = this.state;
+    for (let entity in this.props.entities) {
+      let regex = new RegExp(`^${entity}\..*`);
+      if (regex.test(tokenVal)) {
+        return tokenVal.match(regex)[0].slice(0, entity.length);
+      }
+    }
+    return "";
+  }
+
   createToken(title) {
     console.log("Create a token with title", title);
   }
@@ -86,10 +104,18 @@ export default class ValidatorField extends Component {
     let val = this.formatHTML(e.target.value);
     this.setState({ html: val });
     this.updateAutocomplete();
+    // Reformat phrase to meet database standards
+    // (e.g. braces, double dot, spacing)
     val = val
       .replace(/<u>/g, "[")
       .replace(/<\/u>/g, "]")
       .replace(/&nbsp;/g, "");
+    let dotInToken = /(?<!\.)\.(?!\.)[^\.\[\]]*\]/g;
+    let match = dotInToken.exec(val);
+    while (match) {
+      val = val.slice(0, match.index) + "." + val.slice(match.index);
+      match = dotInToken.exec(val);
+    }
     this.props.onChange(val);
   };
 
@@ -119,10 +145,11 @@ export default class ValidatorField extends Component {
         />
         {this.state.showAutocomplete && (
           <AutocompleteList
-            entities={this.props.entityMatchingDict}
+            entities={this.props.entities}
+            entityName={this.getEntityFromToken()}
             inputVal={this.state.tokenVal}
             onSelect={this.autocompleteVal.bind(this)}
-            onCreate={this.createToken.bind(this)}
+            onCreateEntity={this.createToken.bind(this)}
           />
         )}
       </div>
