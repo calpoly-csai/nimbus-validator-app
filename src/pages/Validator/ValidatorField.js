@@ -74,9 +74,14 @@ export default class ValidatorField extends Component {
     }
   }
 
+  /*
+   * Replaces the partial entity name typed by the user with the complete
+   * entity name provided by 'val'
+   */
   autocompleteVal(val) {
-    //TODO: This replaces first element that matches, even if outside token. Maybe keep track token index and replace only token's innerHTML
-    let updatedContent = this.state.html.replace(this.state.tokenVal, val);
+    let updatedContent = this.state.html.replace(
+      `<u>${this.state.tokenVal}</u>`, `<u>${val}</u>`
+    );
     this.setState({ html: updatedContent });
   }
 
