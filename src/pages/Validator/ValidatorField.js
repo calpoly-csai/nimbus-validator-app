@@ -133,11 +133,15 @@ export default class ValidatorField extends Component {
   updateTokenColor(val, tokenVal) {
     let entity = this.getEntityFromToken(tokenVal);
     let attr = this.getAttributeFromToken(entity, tokenVal);
-    let tagWithStyle = `<u style="background:var(--invalid);">${tokenVal}`;
-    let plainTag = `<u>${tokenVal}`;
+    let tagWithStyle = `<u style="background:var(--invalid);">${tokenVal}<`;
+    let plainTag = `<u>${tokenVal}<`;
     let isValidToken = (
       (tokenVal === entity && entity !== "") ||
       (tokenVal === `${entity}.${attr}` && entity !== "" && attr !== "")
+    );
+    let mustUpdateStyle = (
+      (val.indexOf(tagWithStyle) > -1 || val.indexOf(plainTag) > -1) &&
+      tokenVal.length > 1
     );
 
     // console.log(`HTML: ${val}`)
@@ -145,13 +149,10 @@ export default class ValidatorField extends Component {
     // console.log(`entity: ${entity}`)
     // console.log(`attribute: ${attr}`)
 
-    if (isValidToken) {
-      // Check if the tag style needs to be updated
-      if (val.indexOf(tagWithStyle) > -1 && tokenVal.length > 1)
-        val = val.replace(tagWithStyle, plainTag);
-    } else {
-      if (val.indexOf(plainTag) > -1 && tokenVal.length > 1)
-        val = val.replace(plainTag, tagWithStyle);
+    if (isValidToken && mustUpdateStyle) {
+      val = val.replace(tagWithStyle, plainTag);
+    } else if (!isValidToken && mustUpdateStyle) {
+      val = val.replace(plainTag, tagWithStyle);
     }
     return val;
   }
