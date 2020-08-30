@@ -141,8 +141,8 @@ export default class ValidatorField extends Component {
   updateTokenColor(html, tokenVal) {
     let entity = this.getEntityFromToken(tokenVal);
     let attr = this.getAttributeFromToken(entity, tokenVal);
-    let tagWithStyle = `<u style="background:var(--invalid);">${tokenVal}<`;
-    let plainTag = `<u>${tokenVal}<`;
+    let tagWithStyle = `<u style="background:var(--invalid);">${tokenVal}</u>`;
+    let plainTag = `<u>${tokenVal}</u>`;
     let isValidToken = (
       (tokenVal === entity && entity !== "") ||
       (tokenVal === `${entity}.${attr}` && entity !== "" && attr !== "")
@@ -151,11 +151,6 @@ export default class ValidatorField extends Component {
       (html.indexOf(tagWithStyle) > -1 || html.indexOf(plainTag) > -1) &&
       tokenVal.length > 1
     );
-
-    // console.log(`HTML: ${html}`)
-    // console.log(`tokenVal: ${tokenVal}`)
-    // console.log(`entity: ${entity}`)
-    // console.log(`attribute: ${attr}`)
 
     if (isValidToken && mustUpdateStyle) {
       html = html.replace(tagWithStyle, plainTag);
@@ -169,24 +164,29 @@ export default class ValidatorField extends Component {
     console.log("Create a token with title", title);
   }
 
-  handleTextInput = (e) => {
-    let val = this.formatHTML(e.target.value);
-    let newTokenVal = this.updateAutocomplete();
-    val = this.updateTokenColor(val, newTokenVal);
-    this.setState({ html: val });
+  updateQueryData(html) {
     // Reformat phrase to meet database standards
     // (e.g. braces, double dot, spacing)
-    val = val
+    html = html
       .replace(/<u[^>]*>/g, "[")
       .replace(/<\/u>/g, "]")
       .replace(/&nbsp;/g, " ");
     let dotInToken = /(?<!\.)\.(?!\.)[^\.\[\]]*\]/g;
-    let match = dotInToken.exec(val);
+    let match = dotInToken.exec(html);
     while (match) {
-      val = val.slice(0, match.index) + "." + val.slice(match.index);
-      match = dotInToken.exec(val);
+      html = html.slice(0, match.index) + "." + html.slice(match.index);
+      match = dotInToken.exec(html);
     }
-    this.props.onChange(val);
+    this.props.onChange(html);
+  }
+
+  handleTextInput = (e) => {
+    let newHTML = this.formatHTML(e.target.value);
+    let newTokenVal = this.updateAutocomplete();
+    // Why is this line causing the component to re-render?
+    newHTML = this.updateTokenColor(newHTML, newTokenVal);
+    this.setState({ html: newHTML });
+    this.updateQueryData(newHTML);
   };
 
   render() {
