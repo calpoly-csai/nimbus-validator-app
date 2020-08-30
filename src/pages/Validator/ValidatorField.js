@@ -147,14 +147,10 @@ export default class ValidatorField extends Component {
       (tokenVal === entity && entity !== "") ||
       (tokenVal === `${entity}.${attr}` && entity !== "" && attr !== "")
     );
-    let mustUpdateStyle = (
-      (html.indexOf(tagWithStyle) > -1 || html.indexOf(plainTag) > -1) &&
-      tokenVal.length > 1
-    );
 
-    if (isValidToken && mustUpdateStyle) {
+    if (isValidToken && html.indexOf(tagWithStyle) > -1) {
       html = html.replace(tagWithStyle, plainTag);
-    } else if (!isValidToken && mustUpdateStyle) {
+    } else if (!isValidToken && html.indexOf(plainTag) > -1) {
       html = html.replace(plainTag, tagWithStyle);
     }
     return html;
