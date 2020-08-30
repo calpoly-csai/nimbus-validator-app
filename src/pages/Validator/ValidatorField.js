@@ -88,6 +88,7 @@ export default class ValidatorField extends Component {
       this.setState({ showAutocomplete: false });
       this.setState({ tokenVal: "" });
     }
+    return isToken ? sel.anchorNode.wholeText : "";
   }
 
   /*
@@ -129,18 +130,45 @@ export default class ValidatorField extends Component {
     return tokenAttr;
   }
 
+  updateTokenColor(val, tokenVal) {
+    let entity = this.getEntityFromToken(tokenVal);
+    let attr = this.getAttributeFromToken(entity, tokenVal);
+    let tagWithStyle = `<u style="background:var(--invalid);">${tokenVal}`;
+    let plainTag = `<u>${tokenVal}`;
+    let isValidToken = (
+      (tokenVal === entity && entity !== "") ||
+      (tokenVal === `${entity}.${attr}` && entity !== "" && attr !== "")
+    );
+
+    // console.log(`HTML: ${val}`)
+    // console.log(`tokenVal: ${tokenVal}`)
+    // console.log(`entity: ${entity}`)
+    // console.log(`attribute: ${attr}`)
+
+    if (isValidToken) {
+      // Check if the tag style needs to be updated
+      if (val.indexOf(tagWithStyle) > -1 && tokenVal.length > 1)
+        val = val.replace(tagWithStyle, plainTag);
+    } else {
+      if (val.indexOf(plainTag) > -1 && tokenVal.length > 1)
+        val = val.replace(plainTag, tagWithStyle);
+    }
+    return val;
+  }
+
   createToken(title) {
     console.log("Create a token with title", title);
   }
 
   handleTextInput = (e) => {
     let val = this.formatHTML(e.target.value);
+    let newTokenVal = this.updateAutocomplete();
+    val = this.updateTokenColor(val, newTokenVal);
     this.setState({ html: val });
-    this.updateAutocomplete();
     // Reformat phrase to meet database standards
     // (e.g. braces, double dot, spacing)
     val = val
-      .replace(/<u>/g, "[")
+      .replace(/<u[^>]*>/g, "[")
       .replace(/<\/u>/g, "]")
       .replace(/&nbsp;/g, " ");
     let dotInToken = /(?<!\.)\.(?!\.)[^\.\[\]]*\]/g;
