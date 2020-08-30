@@ -99,6 +99,7 @@ export default class ValidatorField extends Component {
     let updatedContent = this.state.html.replace(
       `>${this.state.tokenVal}</u>`, `>${val}</u>`
     );
+    updatedContent = this.updateTokenColor(updatedContent, val);
     this.setState({ html: updatedContent });
   }
 
@@ -130,7 +131,14 @@ export default class ValidatorField extends Component {
     return tokenAttr;
   }
 
-  updateTokenColor(val, tokenVal) {
+  /*
+   * Changes a token's color if it is valid by adding/removing inline styles.
+   * Takes the current field's html and token text, and updates the color if 
+   * the token:
+   * - doesn't contain an entity in the list of queried entities
+   * - contains a valid entity followed by a dot, but has an invalid attribute
+   */
+  updateTokenColor(html, tokenVal) {
     let entity = this.getEntityFromToken(tokenVal);
     let attr = this.getAttributeFromToken(entity, tokenVal);
     let tagWithStyle = `<u style="background:var(--invalid);">${tokenVal}<`;
@@ -140,21 +148,21 @@ export default class ValidatorField extends Component {
       (tokenVal === `${entity}.${attr}` && entity !== "" && attr !== "")
     );
     let mustUpdateStyle = (
-      (val.indexOf(tagWithStyle) > -1 || val.indexOf(plainTag) > -1) &&
+      (html.indexOf(tagWithStyle) > -1 || html.indexOf(plainTag) > -1) &&
       tokenVal.length > 1
     );
 
-    // console.log(`HTML: ${val}`)
+    // console.log(`HTML: ${html}`)
     // console.log(`tokenVal: ${tokenVal}`)
     // console.log(`entity: ${entity}`)
     // console.log(`attribute: ${attr}`)
 
     if (isValidToken && mustUpdateStyle) {
-      val = val.replace(tagWithStyle, plainTag);
+      html = html.replace(tagWithStyle, plainTag);
     } else if (!isValidToken && mustUpdateStyle) {
-      val = val.replace(plainTag, tagWithStyle);
+      html = html.replace(plainTag, tagWithStyle);
     }
-    return val;
+    return html;
   }
 
   createToken(title) {
