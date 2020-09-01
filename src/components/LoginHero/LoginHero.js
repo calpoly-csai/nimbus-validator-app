@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './LoginHero.scss';
 
 const d = 300;
@@ -14,7 +14,7 @@ export default function LoginHero() {
                     "Nimbus, take me to your data",
                     "Let's clean some data",
                     "CS + AI = best club ever"];
-    let index = Math.floor(Math.random() * messages.length);
+    let [index, setIndex] = useState(Math.floor(Math.random() * messages.length));
     let messageRef = useRef(null);
     let currentMessage = messages[index].split('').map((char, i) => <span className='letter' style={{
         display: `${char === ' ' ? 'initial' : ''}`
