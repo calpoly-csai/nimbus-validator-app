@@ -4,6 +4,7 @@ import ValidatorForm from "./ValidatorForm";
 import TokenBar from "./TokenBar";
 import ValidatorQueryNav from "./ValidatorQueryNav";
 import AllValidated from "./AllValidated";
+import SignOut from "../../components/SignOut/SignOut";
 import axios from "axios";
 
 export default function Validator(props) {
@@ -87,6 +88,9 @@ export default function Validator(props) {
   return (
     <div className="ValidatorPage">
       <h1 className="title">Validate</h1>
+      <div className="signout">
+        <SignOut />
+      </div>
       <ValidatorForm
         query={queries[selectedIndex]}
         onDelete={deleteCurrentQuery}

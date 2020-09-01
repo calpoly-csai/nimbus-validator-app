@@ -20,8 +20,14 @@ export default function SignOut(props) {
 
   return (
     <div className="SignOut">
-      <button className="signOut-button" onClick={signOutUser}>
+      {/* <button className="signOut-button" onClick={signOutUser}>
         Sign Out
+      </button> */}
+      <button className="arrow-icon" onClick={signOutUser}>
+        <ion-icon
+        name="arrow-back-circle-outline"
+        style={{fontSize: "40px", "--ionicon-stroke-width": "40px"}}
+        ></ion-icon>
       </button>
     </div>
   );

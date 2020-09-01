@@ -55,8 +55,11 @@ export default function Login(props) {
             validator={(value) => value && value.length > 7}
             icon="lock-closed-outline"
           />
-          <button className="submit-button" type="submit">
-            Login
+          <button className="arrow-icon" type="submit">
+            <ion-icon
+            name="arrow-forward-circle-outline"
+            style={{fontSize: "40px", "--ionicon-stroke-width": "40px"}}
+            ></ion-icon>
           </button>
         </form>
         <div className="acccount-links">

@@ -110,29 +110,28 @@ button {
     }
   }
 
-  .submit-button {
-    width: 250px;
-    height: 40px;
-    margin: 30px auto 10px;
+  .arrow-icon {
+    margin: 20px auto 10px;
     padding: 0px;
     outline: none;
-    font-size: 16px;
-    font-weight: bold;
+    border: none;
     background: none;
-    border: 1px solid var(--text);
-    border-radius: 4px;
+    opacity: 0.75;
     cursor: pointer;
+    transition: all 0.25s;
+    transform: translate(0, 0);
 
     @media (hover: hover) and (pointer: fine) {
       &:hover {
-        color: white;
-        border: none;
-        background: var(--accent);
+        color: var(--accent);
+        opacity: 1;
+        transition: all 0.25s;
+        transform: translate(0, 1px);
       }
-    }
-    &:active {
-      transition: all 0.025s ease;
-      transform: translate(0, 1px);
+      &:active {
+        transition: all 0.025s;
+        transform: translate(0, 2px);
+      }
     }
   }
 }

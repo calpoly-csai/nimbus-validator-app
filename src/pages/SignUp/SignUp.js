@@ -69,8 +69,11 @@ export default function SignUp(props) {
             value={entryCode}
             icon="key-outline"
           />
-          <button className="submit-button" type="submit">
-            Register
+          <button className="arrow-icon" type="submit">
+            <ion-icon
+            name="arrow-forward-circle-outline"
+            style={{fontSize: "40px", "--ionicon-stroke-width": "40px"}}
+            ></ion-icon>
           </button>
         </form>
         <div className="acccount-links">
