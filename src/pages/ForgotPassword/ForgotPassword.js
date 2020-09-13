@@ -43,7 +43,11 @@ export default function ForgotPassword(props) {
             validator={(value) => value && isEmail(value)}
             icon="person-outline"
           />
-          <button className="arrow-icon" type="submit">
+          <button
+            className="arrow-icon"
+            aria-label="Forgot Password"
+            type="submit"
+          >
             <ion-icon
             name="arrow-forward-circle-outline"
             style={{fontSize: "40px", "--ionicon-stroke-width": "40px"}}

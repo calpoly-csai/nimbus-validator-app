@@ -69,7 +69,11 @@ export default function SignUp(props) {
             value={entryCode}
             icon="key-outline"
           />
-          <button className="arrow-icon" type="submit">
+          <button
+            className="arrow-icon"
+            aria-label="Sign Up"
+            type="submit"
+          >
             <ion-icon
             name="arrow-forward-circle-outline"
             style={{fontSize: "40px", "--ionicon-stroke-width": "40px"}}
