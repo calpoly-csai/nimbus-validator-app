@@ -9,6 +9,19 @@ import axios from "axios";
 export default function Validator(props) {
   let maxQueryQueueSize = 10;
   let [queries, setQueries] = useState([]);
+  useEffect(() => {
+    setQueries([
+      {
+        question: "What are the prereqs for[COURSE]?",
+        answer: "The prerequisites for[COURSE]are[COURSE..prerequisites].",
+        type: "other",
+        isAnswerable: true,
+        id: "query id",
+        validated: false,
+      }
+    ])
+  }, [])
+  
   let [selectedIndex, setSelectedIndex] = useState(0);
 
   let deleteCurrentQuery = async () => {
@@ -34,17 +47,20 @@ export default function Validator(props) {
 
     // regex to remove anything between HTML entities (potential HTML elements)
     let regex = /&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});.*&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});/gi;
+    const nonSpacedToken = /((?<=(\w))(?=(\[)))|((?<=(\]))(?=(\w)))/g
 
     // update query in the database
     let data = {
       id: submittedQuery.id,
       isAnswerable: submittedQuery.isAnswerable === "No" ? false : true,
       type: submittedQuery.type,
-      question: submittedQuery.question.replace(regex, ""),
-      answer: submittedQuery.answer.replace(regex, ""),
+      question: submittedQuery.question.replace(regex, "").replace(nonSpacedToken, " "),
+      answer: submittedQuery.answer.replace(regex, "").replace(nonSpacedToken, " "),
       verified: true,
     };
-    let response = await axios.post(`/new_data/update_phrase`, data);
+
+    debugger
+    // let response = await axios.post(`/new_data/update_phrase`, data);
 
     if (updatedQueries.length - 2 <= selectedIndex)
       await fetchMoreQueries(1, updatedQueries);
