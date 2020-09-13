@@ -21,7 +21,7 @@ export default function SignOut(props) {
   return (
     <div className="SignOut">
       <button
-        className="signOut-button"
+        className="arrow-icon"
         aria-label="Sign Out"
         onClick={signOutUser}
       >
