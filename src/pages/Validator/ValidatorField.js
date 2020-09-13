@@ -78,17 +78,20 @@ export default class ValidatorField extends Component {
     return filteredHTML;
   }
 
-  updateAutocomplete() {
+  getSelectedToken() {
     let sel = window.getSelection();
     let isToken = sel?.anchorNode?.parentElement?.nodeName === "U";
-    if (isToken) {
+    return isToken ? sel.anchorNode.wholeText : "";
+  }
+
+  updateAutocomplete(tokenVal) {
+    if (tokenVal) {
       this.setState({ showAutocomplete: true });
-      this.setState({ tokenVal: sel.anchorNode.wholeText });
+      this.setState({ tokenVal: tokenVal });
     } else {
       this.setState({ showAutocomplete: false });
       this.setState({ tokenVal: "" });
     }
-    return isToken ? sel.anchorNode.wholeText : "";
   }
 
   /*
@@ -99,6 +102,7 @@ export default class ValidatorField extends Component {
     let updatedContent = this.state.html.replace(
       `>${this.state.tokenVal}</u>`, `>${val}</u>`
     );
+    debugger
     updatedContent = this.updateTokenColor(updatedContent, val);
     this.setState({ html: updatedContent });
   }
@@ -147,7 +151,6 @@ export default class ValidatorField extends Component {
       (tokenVal === entity && entity !== "") ||
       (tokenVal === `${entity}.${attr}` && entity !== "" && attr !== "")
     );
-
     if (isValidToken && html.indexOf(tagWithStyle) > -1) {
       html = html.replace(tagWithStyle, plainTag);
     } else if (!isValidToken && html.indexOf(plainTag) > -1) {
@@ -178,10 +181,11 @@ export default class ValidatorField extends Component {
 
   handleTextInput = (e) => {
     let newHTML = this.formatHTML(e.target.value);
-    let newTokenVal = this.updateAutocomplete();
+    const selectedToken = this.getSelectedToken();
     // Why is this line causing the component to re-render?
-    newHTML = this.updateTokenColor(newHTML, newTokenVal);
+    newHTML = this.updateTokenColor(newHTML, selectedToken);
     this.setState({ html: newHTML });
+    this.updateAutocomplete(selectedToken);
     this.updateQueryData(newHTML);
   };
 
@@ -200,7 +204,7 @@ export default class ValidatorField extends Component {
         <h3 className="field-title">{this.props.title}</h3>
         <ContentEditable
           onBlur={this.toggleFocus.bind(this)}
-          onClick={this.updateAutocomplete.bind(this)}
+          onClick={() => this.updateAutocomplete(this.getSelectedToken())}
           onFocus={this.toggleFocus.bind(this)}
           onKeyDown={this.toggleToken.bind(this)}
           className="text-field"
