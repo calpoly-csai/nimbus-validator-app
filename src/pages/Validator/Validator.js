@@ -9,19 +9,6 @@ import axios from "axios";
 export default function Validator(props) {
   let maxQueryQueueSize = 10;
   let [queries, setQueries] = useState([]);
-  useEffect(() => {
-    setQueries([
-      {
-        question: "What are the prereqs for[COURSE]?",
-        answer: "The prerequisites for[COURSE]are[COURSE..prerequisites].",
-        type: "other",
-        isAnswerable: true,
-        id: "query id",
-        validated: false,
-      }
-    ])
-  }, [])
-  
   let [selectedIndex, setSelectedIndex] = useState(0);
 
   let deleteCurrentQuery = async () => {
@@ -58,9 +45,7 @@ export default function Validator(props) {
       answer: submittedQuery.answer.replace(regex, "").replace(nonSpacedToken, " "),
       verified: true,
     };
-
-    debugger
-    // let response = await axios.post(`/new_data/update_phrase`, data);
+    let response = await axios.post(`/new_data/update_phrase`, data);
 
     if (updatedQueries.length - 2 <= selectedIndex)
       await fetchMoreQueries(1, updatedQueries);
