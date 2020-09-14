@@ -7,6 +7,10 @@ import axios from 'axios';
 export default function ValidatorForm({ query, onDelete, onSubmit }) {
   let [question, setQuestion] = useState(query.question);
   let [answer, setAnswer] = useState(query.answer);
+  // TODO: Passing in 'true' for validity is not entirely safe-
+  // This makes the assumption that the fetched phrases are valid
+  let [questionValid, setQuestionValid] = useState(true);
+  let [answerValid, setAnswerValid] = useState(true);
   let [isAnswerable, setAnswerable] = useState(
     query.isAnswerable ? "Yes" : "No"
   );
@@ -67,6 +71,7 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
         onChange={setQuestion}
         queryId={query.id}
         entities={entities}
+        onValidationChange={setQuestionValid}
       />
       <ValidatorField
         title="Answer"
@@ -74,6 +79,7 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
         onChange={setAnswer}
         queryId={query.id}
         entities={entities}
+        onValidationChange={setAnswerValid}
       />
       <div className="query-properties">
         <ValidatorToggle
@@ -93,6 +99,7 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
         <button
           className="validator-submit-button"
           onClick={uploadValidatedQuery}
+          disabled={!questionValid || !answerValid}
         >
           Submit
         </button>

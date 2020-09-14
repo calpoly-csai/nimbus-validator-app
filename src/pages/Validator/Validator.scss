@@ -66,6 +66,11 @@
     }
     .validator-submit-button {
       background: var(--confirm);
+
+      &:disabled {
+        background: gray;
+        opacity: 0.5;
+      }
     }
     .validator-deny-button {
       background: var(--deny);
