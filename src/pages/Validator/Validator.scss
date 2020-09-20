@@ -70,6 +70,7 @@
       &:disabled {
         background: gray;
         opacity: 0.5;
+        cursor: not-allowed;
       }
     }
     .validator-deny-button {
