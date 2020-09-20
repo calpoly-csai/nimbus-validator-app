@@ -26,7 +26,6 @@ export default function AutocompleteList({
   let handleSelect = (entity) => {
     onSelect(entity);
   };
-
   
   /*
    * Returns a list of synonym autocomplete options, filtered by the input

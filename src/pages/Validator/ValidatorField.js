@@ -8,17 +8,11 @@ export default class ValidatorField extends Component {
     isFocused: false,
     fieldRef: React.createRef(),
     showAutocomplete: false,
-    tokenVal: "",
+    tokenVal: ""
   };
 
   componentDidMount() {
     this.setState({ html: this.formatQueryHTML(this.props.value) });
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.value === this.props.value) return;
-    let html = this.formatQueryHTML(this.props.value);
-    this.setState({ html });
   }
 
   formatQueryHTML(query) {
@@ -37,9 +31,31 @@ export default class ValidatorField extends Component {
 
   toggleFocus() {
     this.updateAutocomplete();
+    this.checkTokenValidity();
     this.setState((state) => ({
       isFocused: !state.isFocused,
     }));
+  }
+
+  checkTokenValidity() {
+    let val = this.state.html;
+    if (!val) return;
+    let isFieldValid = true;
+    let tokenInHTML = /(?<=>)[^<>]*(?=<\/u>)/g;
+    let matchArr;
+    while ((matchArr = tokenInHTML.exec(val)) !== null) {
+      let tokenText = matchArr[0];
+      let entity = this.getEntityFromToken(tokenText);
+      let attribute = this.getAttributeFromToken(entity, tokenText);
+      let isTokenValid = (
+        tokenText === entity ||
+        (entity !== "" && attribute !== "")
+      );
+      if (!isTokenValid)
+        isFieldValid = false;
+    }
+    if (isFieldValid !== this.props.isValid)
+      this.props.onValidationChange(isFieldValid);
   }
 
   formatHTML(innerHTML) {
@@ -80,25 +96,37 @@ export default class ValidatorField extends Component {
    */
   autocompleteVal(val) {
     let updatedContent = this.state.html.replace(
-      `<u>${this.state.tokenVal}</u>`, `<u>${val}</u>`
+      `>${this.state.tokenVal}</u>`, `>${val}</u>`
     );
     this.setState({ html: updatedContent });
   }
 
-  /**
-   * Indicates whether attributes should be shown, and for which entity.
-   * If the name of an entity exists at the start of the token and is followed 
-   * by a dot, returns that entities name. Else, returns empty string.
-   */
-  getEntityFromToken() {
-    const {tokenVal} = this.state;
-    for (let entity in this.props.entities) {
-      let regex = new RegExp(`^${entity}\..*`);
-      if (regex.test(tokenVal)) {
-        return tokenVal.match(regex)[0].slice(0, entity.length);
-      }
+  /** If the name of an entity exists at the start of the token, returns that 
+  * entity's name. Else, returns empty string.
+  */
+ getEntityFromToken(tokenVal) {
+  for (let entity in this.props.entities) {
+    let startsWithEntityName = new RegExp(`^${entity}`);
+      if (startsWithEntityName.test(tokenVal))
+        return entity;
     }
     return "";
+  }
+
+  /**
+   * If the token contains an entity, followed by a dot, followed by a complete 
+   * attribute name, returns that attribute's name. Else, returns an empty 
+   * string.
+   */
+  getAttributeFromToken(entity, tokenVal) {
+    let tokenAttr = "";
+    if (!entity) return tokenAttr;
+    this.props.entities[entity]['attributes'].forEach(attr => {
+      let attrMatch = new RegExp(`(?<=\\.)${attr}`);
+      if (attrMatch.test(tokenVal))
+        tokenAttr = attr;
+    });
+    return tokenAttr;
   }
 
   createToken(title) {
@@ -151,7 +179,7 @@ export default class ValidatorField extends Component {
         {this.state.showAutocomplete && (
           <AutocompleteList
             entities={this.props.entities}
-            entityName={this.getEntityFromToken()}
+            entityName={this.getEntityFromToken(this.state.tokenVal)}
             inputVal={this.state.tokenVal}
             onSelect={this.autocompleteVal.bind(this)}
             onCreateEntity={this.createToken.bind(this)}
