@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './LoginHero.scss';
 
 const d = 300;
@@ -7,14 +7,22 @@ function randomDist(dist) {
     return (Math.random() * 2 - 1) * dist
 }
 
+// general purpose function used to delay for a set amount of time
+const sleep = (ms) => new Promise(resolve => {
+    setTimeout(() => {
+        resolve()
+    }, ms)
+})
+
+
 export default function LoginHero() {
     let messages = ["Hello Nimbus",
-                    "Nimbus, consider yourself validated",
-                    "Nimbus, what is CSAI?",
-                    "Nimbus, take me to your data",
-                    "Let's clean some data",
-                    "CS + AI = best club ever"];
-    let index = Math.floor(Math.random() * messages.length);
+        "Nimbus, consider yourself validated",
+        "Nimbus, what is CSAI?",
+        "Nimbus, take me to your data",
+        "Let's clean some data",
+        "CS + AI = best club ever"];
+    let [index, setIndex] = useState(Math.floor(Math.random() * messages.length));
     let messageRef = useRef(null);
     let currentMessage = messages[index].split('').map((char, i) => <span className='letter' style={{
         display: `${char === ' ' ? 'initial' : ''}`
@@ -22,24 +30,29 @@ export default function LoginHero() {
 
     let animateLetters = () => {
         let letters = [...messageRef.current.children];
-        let i = 0;
-        letters.forEach(letter => {
+        const animationDuration = 1000
+        const displayTime = 5000
+        const letterAnimationState = letters.map(async (letter, i) => {
             let delay = i * 100;
+
             // animate each individual span element (character)
             let keyframes = {
                 transform: [
-                `translate(${randomDist(d)}px, ${randomDist(d)}px)`,
-                'translate(0, 0)'],
+                    `translate(${randomDist(d)}px, ${randomDist(d)}px)`,
+                    'translate(0, 0)'],
                 opacity: ['0.2', '1']
             };
             // easing: easInOutBack from https://easings.net/#easeInOutBack
-            letter.animate(keyframes, { duration: 1000, easing: 'cubic-bezier(0.68, -0.6, 0.32, 1.6)', delay: delay});
-            setTimeout(() => {letter.style.opacity = 1}, delay + 100);
-            i++;
+            let anim = letter.animate(keyframes, { duration: animationDuration, easing: 'cubic-bezier(0.68, -0.6, 0.32, 1.6)', delay: delay, fill: "forwards" });
+            await sleep(animationDuration + displayTime)
+            anim.reverse()
+            await sleep(animationDuration)
         });
+
+        Promise.all(letterAnimationState).then(() => setIndex(i => (i + 1) % messages.length))
     }
 
-    useEffect(animateLetters, [messageRef]);
+    useEffect(animateLetters, [messageRef, index]);
 
     return (
         <div className="LoginHero">
