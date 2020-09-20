@@ -17,8 +17,8 @@ export default class ValidatorField extends Component {
 
   formatQueryHTML(query) {
     return query.replace(/\[/g, "<u>")
-      .replace(/\]/g, "</u>")
-      .replace(/\.\./g, ".");
+                .replace(/\]/g, "</u>")
+                .replace(/\.\./g, ".");
   }
 
   toggleToken(e) {
