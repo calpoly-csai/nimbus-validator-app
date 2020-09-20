@@ -136,6 +136,20 @@ export default class ValidatorField extends Component {
   }
 
   /*
+  * Returns natural index of the token that starts at the provided index in the 
+  * html string.
+  * Takes an html string and slices from it start up to the endIndex
+  */
+  getTokenChildIndex(html, endIndex) {
+    let precedingText = html.slice(0, endIndex);
+    let closingTag = /<\/u>/g;
+    let matchCount = precedingText.match(closingTag)
+
+    // matchCount is either null or an array
+    return (matchCount) ? matchCount.length + 1 : 1;
+  }
+
+  /*
    * Changes a token's color if it is valid by adding/removing inline styles.
    * Takes the current field's html and token text, and updates the color if 
    * the token:
@@ -151,10 +165,25 @@ export default class ValidatorField extends Component {
       (tokenVal === entity && entity !== "") ||
       (tokenVal === `${entity}.${attr}` && entity !== "" && attr !== "")
     );
-    if (isValidToken && html.indexOf(tagWithStyle) > -1) {
-      html = html.replace(tagWithStyle, plainTag);
-    } else if (!isValidToken && html.indexOf(plainTag) > -1) {
-      html = html.replace(plainTag, tagWithStyle);
+    // if (isValidToken && html.indexOf(tagWithStyle) > -1) {
+    //   // html = html.replace(tagWithStyle, plainTag);
+    // } else if (!isValidToken && html.indexOf(plainTag) > -1) {
+    //   // html = html.replace(plainTag, tagWithStyle);
+    // }
+    let tokenIndex;
+    if (tokenVal !== "") {
+      tokenIndex = this.getTokenChildIndex(html, html.indexOf(plainTag))
+      console.log(tokenIndex)
+      // TODO: use the token index with nth-child to style the token
+        /*
+
+        .text-field {
+          u:nth-child(2) {
+            --token-color: red;
+          }
+        }
+
+        */
     }
     return html;
   }
@@ -184,8 +213,8 @@ export default class ValidatorField extends Component {
     const selectedToken = this.getSelectedToken();
     // Why is this line causing the component to re-render?
     newHTML = this.updateTokenColor(newHTML, selectedToken);
+   // this.updateAutocomplete(selectedToken);
     this.setState({ html: newHTML });
-    this.updateAutocomplete(selectedToken);
     this.updateQueryData(newHTML);
   };
 
