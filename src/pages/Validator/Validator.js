@@ -34,14 +34,15 @@ export default function Validator(props) {
 
     // regex to remove anything between HTML entities (potential HTML elements)
     let regex = /&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});.*&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});/gi;
+    const nonSpacedToken = /((?<=(\w))(?=(\[)))|((?<=(\]))(?=(\w)))/g
 
     // update query in the database
     let data = {
       id: submittedQuery.id,
       isAnswerable: submittedQuery.isAnswerable === "No" ? false : true,
       type: submittedQuery.type,
-      question: submittedQuery.question.replace(regex, ""),
-      answer: submittedQuery.answer.replace(regex, ""),
+      question: submittedQuery.question.replace(regex, "").replace(nonSpacedToken, " "),
+      answer: submittedQuery.answer.replace(regex, "").replace(nonSpacedToken, " "),
       verified: true,
     };
     let response = await axios.post(`/new_data/update_phrase`, data);

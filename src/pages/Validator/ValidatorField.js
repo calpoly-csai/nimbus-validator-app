@@ -114,7 +114,7 @@ export default class ValidatorField extends Component {
     val = val
       .replace(/<u>/g, "[")
       .replace(/<\/u>/g, "]")
-      .replace(/&nbsp;/g, "");
+      .replace(/&nbsp;/g, " ");
     let dotInToken = /(?<!\.)\.(?!\.)[^\.\[\]]*\]/g;
     let match = dotInToken.exec(val);
     while (match) {
