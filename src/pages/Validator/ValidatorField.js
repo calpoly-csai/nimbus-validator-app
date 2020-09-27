@@ -1,4 +1,7 @@
+ /** @jsx jsx */
+
 import React, { Component } from "react";
+import { css, jsx } from '@emotion/core'
 import Token from "./Token";
 import ContentEditable from "react-contenteditable";
 import AutocompleteList from "./AutocompleteList";
@@ -8,7 +11,8 @@ export default class ValidatorField extends Component {
     isFocused: false,
     fieldRef: React.createRef(),
     showAutocomplete: false,
-    tokenVal: ""
+    tokenVal: "",
+    tokenStates: []
   };
 
   componentDidMount() {
@@ -102,8 +106,8 @@ export default class ValidatorField extends Component {
     let updatedContent = this.state.html.replace(
       `>${this.state.tokenVal}</u>`, `>${val}</u>`
     );
-    debugger
-    updatedContent = this.updateTokenColor(updatedContent, val);
+   //this.updateTokenColor(updatedContent, val);
+   console.log({ html: updatedContent })
     this.setState({ html: updatedContent });
   }
 
@@ -157,35 +161,28 @@ export default class ValidatorField extends Component {
    * - contains a valid entity followed by a dot, but has an invalid attribute
    */
   updateTokenColor(html, tokenVal) {
+
+    const updateTokenState = isValid => {
+      if(!this.state.fieldRef.current || !tokenIndex) return;
+      this.setState(state => {
+        let tokenStates = [...state.tokenStates]
+        tokenStates.length = this.state.fieldRef.current.childElementCount;
+        tokenStates[tokenIndex - 1] = isValid;
+        return {...state, tokenStates}
+      })
+    }
     let entity = this.getEntityFromToken(tokenVal);
     let attr = this.getAttributeFromToken(entity, tokenVal);
-    let tagWithStyle = `<u style="background:var(--invalid);">${tokenVal}</u>`;
-    let plainTag = `<u>${tokenVal}</u>`;
+    let uTag = `<u>${tokenVal}</u>`;
     let isValidToken = (
       (tokenVal === entity && entity !== "") ||
       (tokenVal === `${entity}.${attr}` && entity !== "" && attr !== "")
     );
-    // if (isValidToken && html.indexOf(tagWithStyle) > -1) {
-    //   // html = html.replace(tagWithStyle, plainTag);
-    // } else if (!isValidToken && html.indexOf(plainTag) > -1) {
-    //   // html = html.replace(plainTag, tagWithStyle);
-    // }
-    let tokenIndex;
+    let tokenIndex = null;
     if (tokenVal !== "") {
-      tokenIndex = this.getTokenChildIndex(html, html.indexOf(plainTag))
-      console.log(tokenIndex)
-      // TODO: use the token index with nth-child to style the token
-        /*
-
-        .text-field {
-          u:nth-child(2) {
-            --token-color: red;
-          }
-        }
-
-        */
+      tokenIndex = this.getTokenChildIndex(html, html.indexOf(uTag))
     }
-    return html;
+    updateTokenState(isValidToken)
   }
 
   createToken(title) {
@@ -212,8 +209,8 @@ export default class ValidatorField extends Component {
     let newHTML = this.formatHTML(e.target.value);
     const selectedToken = this.getSelectedToken();
     // Why is this line causing the component to re-render?
-    newHTML = this.updateTokenColor(newHTML, selectedToken);
-   // this.updateAutocomplete(selectedToken);
+    // this.updateTokenColor(newHTML, selectedToken);
+    this.updateAutocomplete(selectedToken);
     this.setState({ html: newHTML });
     this.updateQueryData(newHTML);
   };
@@ -223,15 +220,27 @@ export default class ValidatorField extends Component {
       background: "var(--accent)",
       transform: "scaleX(1.4) translateX(-2px)",
     };
+    const tokenStyles = this.state.tokenStates.map((isValid, i) => {
+      return `
+      .text-field > u:nth-of-type(${i + 1}) {
+        background: ${isValid ? "var(--accent)": "var(--invalid)"};
+      }
+      `
+    }).join("\n");
+
+    const parentStyles = css`
+      ${tokenStyles}
+    `
 
     return (
-      <div className="ValidatorField">
+      <div className="ValidatorField" css={parentStyles}>
         <div
           className="block"
           style={this.state.isFocused ? focusedBlock : null}
         ></div>
         <h3 className="field-title">{this.props.title}</h3>
         <ContentEditable
+          
           onBlur={this.toggleFocus.bind(this)}
           onClick={() => this.updateAutocomplete(this.getSelectedToken())}
           onFocus={this.toggleFocus.bind(this)}
@@ -243,7 +252,7 @@ export default class ValidatorField extends Component {
           disabled={false} // use true to disable editing
         />
         {this.state.showAutocomplete && (
-          <AutocompleteList
+          <AutocompleteList   
             entities={this.props.entities}
             entityName={this.getEntityFromToken(this.state.tokenVal)}
             inputVal={this.state.tokenVal}
