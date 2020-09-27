@@ -34,7 +34,7 @@ export default class ValidatorField extends Component {
   }
 
   toggleFocus() {
-    this.updateAutocomplete();
+    this.updateAutocomplete(this.getSelectedToken());
     this.checkTokenValidity();
     this.setState((state) => ({
       isFocused: !state.isFocused,
@@ -106,8 +106,7 @@ export default class ValidatorField extends Component {
     let updatedContent = this.state.html.replace(
       `>${this.state.tokenVal}</u>`, `>${val}</u>`
     );
-   //this.updateTokenColor(updatedContent, val);
-   console.log({ html: updatedContent })
+    this.updateTokenColor(updatedContent, val);
     this.setState({ html: updatedContent });
   }
 
@@ -209,7 +208,7 @@ export default class ValidatorField extends Component {
     let newHTML = this.formatHTML(e.target.value);
     const selectedToken = this.getSelectedToken();
     // Why is this line causing the component to re-render?
-    // this.updateTokenColor(newHTML, selectedToken);
+    this.updateTokenColor(newHTML, selectedToken);
     this.updateAutocomplete(selectedToken);
     this.setState({ html: newHTML });
     this.updateQueryData(newHTML);
@@ -240,7 +239,6 @@ export default class ValidatorField extends Component {
         ></div>
         <h3 className="field-title">{this.props.title}</h3>
         <ContentEditable
-          
           onBlur={this.toggleFocus.bind(this)}
           onClick={() => this.updateAutocomplete(this.getSelectedToken())}
           onFocus={this.toggleFocus.bind(this)}
