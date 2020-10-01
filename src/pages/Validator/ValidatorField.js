@@ -106,7 +106,7 @@ export default class ValidatorField extends Component {
     let updatedContent = this.state.html.replace(
       `>${this.state.tokenVal}</u>`, `>${val}</u>`
     );
-    this.updateTokenColor(updatedContent, val);
+    this.updateTokenColor(updatedContent);
     this.setState({ html: updatedContent });
   }
 
@@ -153,35 +153,29 @@ export default class ValidatorField extends Component {
   }
 
   /*
-   * Changes a token's color if it is valid by adding/removing inline styles.
-   * Takes the current field's html and token text, and updates the color if 
-   * the token:
-   * - doesn't contain an entity in the list of queried entities
-   * - contains a valid entity followed by a dot, but has an invalid attribute
+   * Updates the color of each token to match whether it's text is valid.
+   * Takes the current field's html, and updates a token's color if it:
+   *   - doesn't contain an entity in the list of queried entities
+   *   - contains a valid entity followed by a dot, but has an invalid attribute
    */
-  updateTokenColor(html, tokenVal) {
+  updateTokenColor(html) {
+    let tokenStates = [];
+    let taggedTokenRegex = /<u>[^<]*<\/u>/g;
+    let tokenValRegex = /(?<=<u>)[^<]*(?=<\/u>)/g;
+    let taggedToken = taggedTokenRegex.exec(html);
+    while (taggedToken) {
+      let tokenVal = taggedToken[0].match(tokenValRegex)[0];
+      let entity = this.getEntityFromToken(tokenVal);
+      let attr = this.getAttributeFromToken(entity, tokenVal);
+      let isValidToken = (
+        (tokenVal === entity && entity !== "") ||
+        (tokenVal === `${entity}.${attr}` && entity !== "" && attr !== "")
+      );
+      tokenStates.push(isValidToken);
+      taggedToken = taggedTokenRegex.exec(html);
+    }
 
-    const updateTokenState = isValid => {
-      if(!this.state.fieldRef.current || !tokenIndex) return;
-      this.setState(state => {
-        let tokenStates = [...state.tokenStates]
-        tokenStates.length = this.state.fieldRef.current.childElementCount;
-        tokenStates[tokenIndex - 1] = isValid;
-        return {...state, tokenStates}
-      })
-    }
-    let entity = this.getEntityFromToken(tokenVal);
-    let attr = this.getAttributeFromToken(entity, tokenVal);
-    let uTag = `<u>${tokenVal}</u>`;
-    let isValidToken = (
-      (tokenVal === entity && entity !== "") ||
-      (tokenVal === `${entity}.${attr}` && entity !== "" && attr !== "")
-    );
-    let tokenIndex = null;
-    if (tokenVal !== "") {
-      tokenIndex = this.getTokenChildIndex(html, html.indexOf(uTag))
-    }
-    updateTokenState(isValidToken)
+    this.setState({ tokenStates });
   }
 
   createToken(title) {
@@ -189,7 +183,7 @@ export default class ValidatorField extends Component {
   }
 
   updateQueryData(html) {
-    // Reformat phrase to meet database standards
+    // Reformat phrase to follow database syntax
     // (e.g. braces, double dot, spacing)
     html = html
       .replace(/<u[^>]*>/g, "[")
@@ -206,9 +200,8 @@ export default class ValidatorField extends Component {
 
   handleTextInput = (e) => {
     let newHTML = this.formatHTML(e.target.value);
+    this.updateTokenColor(newHTML);
     const selectedToken = this.getSelectedToken();
-    // Why is this line causing the component to re-render?
-    this.updateTokenColor(newHTML, selectedToken);
     this.updateAutocomplete(selectedToken);
     this.setState({ html: newHTML });
     this.updateQueryData(newHTML);
