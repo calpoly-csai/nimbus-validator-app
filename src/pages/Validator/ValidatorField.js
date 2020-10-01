@@ -167,7 +167,8 @@ export default class ValidatorField extends Component {
     html = html
       .replace(/<u[^>]*>/g, "[")
       .replace(/<\/u>/g, "]")
-      .replace(/&nbsp;/g, " ");
+      .replace(/&nbsp;/g, " ")
+      .replace(/<\/?span[^>]*>/g, "");
     let dotInToken = /(?<!\.)\.(?!\.)[^\.\[\]]*\]/g;
     let match = dotInToken.exec(html);
     while (match) {
