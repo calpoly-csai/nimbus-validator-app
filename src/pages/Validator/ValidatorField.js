@@ -19,6 +19,12 @@ export default class ValidatorField extends Component {
     this.setState({ html: this.formatQueryHTML(this.props.value) });
   }
 
+  /* If a different query is navigated to, display the new text. */
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps)
+      this.setState({ html: this.formatQueryHTML(this.props.value) });
+  }
+
   formatQueryHTML(query) {
     return query.replace(/\[/g, "<u>")
                 .replace(/\]/g, "</u>")
@@ -82,11 +88,12 @@ export default class ValidatorField extends Component {
    * Hides the autocomplete options after replacement.
    */
   autocompleteVal(val) {
-    let updatedContent = this.state.html.replace(
+    let updatedHTML = this.state.html.replace(
       `>${this.state.tokenVal}</u>`, `>${val}</u>`
     );
-    this.updateTokenColor(updatedContent);
-    this.setState({ html: updatedContent, showAutocomplete: false });
+    this.updateTokenColor(updatedHTML);
+    this.updateQueryData(updatedHTML);
+    this.setState({ html: updatedHTML, showAutocomplete: false });
   }
 
 /*

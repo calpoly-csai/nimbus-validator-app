@@ -67,7 +67,7 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
     <form className="ValidatorForm" onSubmit={(e) => e.preventDefault()}>
       <ValidatorField
         title="Question"
-        value={query.question}
+        value={question}
         onChange={setQuestion}
         queryId={query.id}
         entities={entities}
@@ -75,7 +75,7 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
       />
       <ValidatorField
         title="Answer"
-        value={query.answer}
+        value={answer}
         onChange={setAnswer}
         queryId={query.id}
         entities={entities}
