@@ -35,31 +35,9 @@ export default class ValidatorField extends Component {
 
   toggleFocus() {
     this.updateAutocomplete(this.getSelectedToken());
-    this.checkTokenValidity();
     this.setState((state) => ({
       isFocused: !state.isFocused,
     }));
-  }
-
-  checkTokenValidity() {
-    let val = this.state.html;
-    if (!val) return;
-    let isFieldValid = true;
-    let tokenInHTML = /(?<=>)[^<>]*(?=<\/u>)/g;
-    let matchArr;
-    while ((matchArr = tokenInHTML.exec(val)) !== null) {
-      let tokenText = matchArr[0];
-      let entity = this.getEntityFromToken(tokenText);
-      let attribute = this.getAttributeFromToken(entity, tokenText);
-      let isTokenValid = (
-        tokenText === entity ||
-        (entity !== "" && attribute !== "")
-      );
-      if (!isTokenValid)
-        isFieldValid = false;
-    }
-    if (isFieldValid !== this.props.isValid)
-      this.props.onValidationChange(isFieldValid);
   }
 
   formatHTML(innerHTML) {
@@ -99,20 +77,22 @@ export default class ValidatorField extends Component {
   }
 
   /*
-   * Replaces the partial entity name typed by the user with the complete
-   * entity name provided by 'val'
+   * Replaces the partial entity/attribute name typed by the user with the 
+   * complete name provided by 'val'.
+   * Hides the autocomplete options after replacement.
    */
   autocompleteVal(val) {
     let updatedContent = this.state.html.replace(
       `>${this.state.tokenVal}</u>`, `>${val}</u>`
     );
     this.updateTokenColor(updatedContent);
-    this.setState({ html: updatedContent });
+    this.setState({ html: updatedContent, showAutocomplete: false });
   }
 
-  /** If the name of an entity exists at the start of the token, returns that 
-  * entity's name. Else, returns empty string.
-  */
+/*
+ * If the name of an entity exists at the start of the token, returns that 
+ * entity's name. Else, returns empty string.
+ */
  getEntityFromToken(tokenVal) {
   for (let entity in this.props.entities) {
     let startsWithEntityName = new RegExp(`^${entity}`);
@@ -122,7 +102,7 @@ export default class ValidatorField extends Component {
     return "";
   }
 
-  /**
+  /*
    * If the token contains an entity, followed by a dot, followed by a complete 
    * attribute name, returns that attribute's name. Else, returns an empty 
    * string.
@@ -139,26 +119,15 @@ export default class ValidatorField extends Component {
   }
 
   /*
-  * Returns natural index of the token that starts at the provided index in the 
-  * html string.
-  * Takes an html string and slices from it start up to the endIndex
-  */
-  getTokenChildIndex(html, endIndex) {
-    let precedingText = html.slice(0, endIndex);
-    let closingTag = /<\/u>/g;
-    let matchCount = precedingText.match(closingTag)
-
-    // matchCount is either null or an array
-    return (matchCount) ? matchCount.length + 1 : 1;
-  }
-
-  /*
    * Updates the color of each token to match whether it's text is valid.
+   * Additionally, it disables the submission button if an invalid token exists
+   *  (or re-enables it if all tokens are valid).
    * Takes the current field's html, and updates a token's color if it:
    *   - doesn't contain an entity in the list of queried entities
    *   - contains a valid entity followed by a dot, but has an invalid attribute
    */
   updateTokenColor(html) {
+    let isFieldValid = true;
     let tokenStates = [];
     let taggedTokenRegex = /<u>[^<]*<\/u>/g;
     let tokenValRegex = /(?<=<u>)[^<]*(?=<\/u>)/g;
@@ -172,9 +141,12 @@ export default class ValidatorField extends Component {
         (tokenVal === `${entity}.${attr}` && entity !== "" && attr !== "")
       );
       tokenStates.push(isValidToken);
+      if (!isValidToken)
+        isFieldValid = false;
       taggedToken = taggedTokenRegex.exec(html);
     }
-
+    if (isFieldValid !== this.props.isValid)
+      this.props.onValidationChange(isFieldValid);
     this.setState({ tokenStates });
   }
 
