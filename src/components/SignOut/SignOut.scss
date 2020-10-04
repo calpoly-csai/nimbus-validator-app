@@ -1,34 +1,17 @@
 .SignOut {
   .signOut-button {
-    width: max-content;
-    height: 40px;
-    margin: 30px auto 10px;
-    padding: 0 15px;
-    outline: none;
-    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
     font-weight: bold;
-    background: none;
-    color: #414141;
-    border: 1px solid #414141;
-    border-radius: 4px;
     cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.2s;
 
     @media (hover: hover) and (pointer: fine) {
       &:hover {
-        color: white;
-        border: none;
-        background: rgb(113, 204, 217);
-        background: linear-gradient(
-          135deg,
-          rgba(113, 204, 217, 1) 0%,
-          rgba(128, 85, 162, 1) 65%,
-          rgba(128, 85, 162, 1) 100%
-        );
+        opacity: 1;
       }
-    }
-    &:active {
-      transition: all 0.025s ease;
-      transform: translate(0, 1px);
     }
   }
 }

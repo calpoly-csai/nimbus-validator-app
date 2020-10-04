@@ -21,7 +21,7 @@ export default function Login(props) {
     e.preventDefault();
     if (!formIsValid()) return;
     try {
-      const user = await auth.signInWithEmailAndPassword(username, password);
+      await auth.signInWithEmailAndPassword(username, password);
     } catch (err) {
       alert(err.message);
       return;

@@ -20,9 +20,9 @@ export default function SignOut(props) {
 
   return (
     <div className="SignOut">
-      <button className="signOut-button" onClick={signOutUser}>
+      <p className="signOut-button" onClick={signOutUser}>
         Sign Out
-      </button>
+      </p>
     </div>
   );
 }

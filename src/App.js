@@ -10,12 +10,13 @@ import SignUp from "./pages/SignUp/SignUp";
 import Validator from "./pages/Validator/Validator";
 
 function App() {
-  let [user, setUser] = useState(null);
+  // Currently, we are not using the user, but we could in the future.
+  // let [user, setUser] = useState(null);
   let [signedIn, setSignedIn] = useState(false);
 
   let mountFirebaseAuth = () => {
     auth.onAuthStateChanged((user) => {
-      setUser(auth.currentUser);
+      // setUser(auth.currentUser);
       user ? setSignedIn(true) : setSignedIn(false);
     });
   };

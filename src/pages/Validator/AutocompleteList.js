@@ -44,6 +44,7 @@ export default function AutocompleteList({
             </li >
           );
         }
+        else return null;
       })
     );
   };

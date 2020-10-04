@@ -1,5 +1,7 @@
+ /** @jsx jsx */
+
 import React, { Component } from "react";
-import Token from "./Token";
+import { css, jsx } from '@emotion/core'
 import ContentEditable from "react-contenteditable";
 import AutocompleteList from "./AutocompleteList";
 export default class ValidatorField extends Component {
@@ -8,11 +10,18 @@ export default class ValidatorField extends Component {
     isFocused: false,
     fieldRef: React.createRef(),
     showAutocomplete: false,
-    tokenVal: ""
+    tokenVal: "",
+    tokenStates: []
   };
 
   componentDidMount() {
     this.setState({ html: this.formatQueryHTML(this.props.value) });
+  }
+
+  /* If a different query is navigated to, display the new text. */
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps)
+      this.setState({ html: this.formatQueryHTML(this.props.value) });
   }
 
   formatQueryHTML(query) {
@@ -30,32 +39,10 @@ export default class ValidatorField extends Component {
   }
 
   toggleFocus() {
-    this.updateAutocomplete();
-    this.checkTokenValidity();
+    this.updateAutocomplete(this.getSelectedToken());
     this.setState((state) => ({
       isFocused: !state.isFocused,
     }));
-  }
-
-  checkTokenValidity() {
-    let val = this.state.html;
-    if (!val) return;
-    let isFieldValid = true;
-    let tokenInHTML = /(?<=>)[^<>]*(?=<\/u>)/g;
-    let matchArr;
-    while ((matchArr = tokenInHTML.exec(val)) !== null) {
-      let tokenText = matchArr[0];
-      let entity = this.getEntityFromToken(tokenText);
-      let attribute = this.getAttributeFromToken(entity, tokenText);
-      let isTokenValid = (
-        tokenText === entity ||
-        (entity !== "" && attribute !== "")
-      );
-      if (!isTokenValid)
-        isFieldValid = false;
-    }
-    if (isFieldValid !== this.props.isValid)
-      this.props.onValidationChange(isFieldValid);
   }
 
   formatHTML(innerHTML) {
@@ -78,12 +65,16 @@ export default class ValidatorField extends Component {
     return filteredHTML;
   }
 
-  updateAutocomplete() {
+  getSelectedToken() {
     let sel = window.getSelection();
     let isToken = sel?.anchorNode?.parentElement?.nodeName === "U";
-    if (isToken) {
+    return isToken ? sel.anchorNode.wholeText : "";
+  }
+
+  updateAutocomplete(tokenVal) {
+    if (tokenVal) {
       this.setState({ showAutocomplete: true });
-      this.setState({ tokenVal: sel.anchorNode.wholeText });
+      this.setState({ tokenVal: tokenVal });
     } else {
       this.setState({ showAutocomplete: false });
       this.setState({ tokenVal: "" });
@@ -91,19 +82,23 @@ export default class ValidatorField extends Component {
   }
 
   /*
-   * Replaces the partial entity name typed by the user with the complete
-   * entity name provided by 'val'
+   * Replaces the partial entity/attribute name typed by the user with the 
+   * complete name provided by 'val'.
+   * Hides the autocomplete options after replacement.
    */
   autocompleteVal(val) {
-    let updatedContent = this.state.html.replace(
+    let updatedHTML = this.state.html.replace(
       `>${this.state.tokenVal}</u>`, `>${val}</u>`
     );
-    this.setState({ html: updatedContent });
+    this.updateTokenColor(updatedHTML);
+    this.updateQueryData(updatedHTML);
+    this.setState({ html: updatedHTML, showAutocomplete: false });
   }
 
-  /** If the name of an entity exists at the start of the token, returns that 
-  * entity's name. Else, returns empty string.
-  */
+/*
+ * If the name of an entity exists at the start of the token, returns that 
+ * entity's name. Else, returns empty string.
+ */
  getEntityFromToken(tokenVal) {
   for (let entity in this.props.entities) {
     let startsWithEntityName = new RegExp(`^${entity}`);
@@ -113,7 +108,7 @@ export default class ValidatorField extends Component {
     return "";
   }
 
-  /**
+  /*
    * If the token contains an entity, followed by a dot, followed by a complete 
    * attribute name, returns that attribute's name. Else, returns an empty 
    * string.
@@ -129,27 +124,66 @@ export default class ValidatorField extends Component {
     return tokenAttr;
   }
 
+  /*
+   * Updates the color of each token to match whether it's text is valid.
+   * Additionally, it disables the submission button if an invalid token exists
+   *  (or re-enables it if all tokens are valid).
+   * Takes the current field's html, and updates a token's color if it:
+   *   - doesn't contain an entity in the list of queried entities
+   *   - contains a valid entity followed by a dot, but has an invalid attribute
+   */
+  updateTokenColor(html) {
+    let isFieldValid = true;
+    let tokenStates = [];
+    let taggedTokenRegex = /<u>[^<]*<\/u>/g;
+    let tokenValRegex = /(?<=<u>)[^<]*(?=<\/u>)/g;
+    let taggedToken = taggedTokenRegex.exec(html);
+    while (taggedToken) {
+      let tokenVal = taggedToken[0].match(tokenValRegex)[0];
+      let entity = this.getEntityFromToken(tokenVal);
+      let attr = this.getAttributeFromToken(entity, tokenVal);
+      let isValidToken = (
+        (tokenVal === entity && entity !== "") ||
+        (tokenVal === `${entity}.${attr}` && entity !== "" && attr !== "")
+      );
+      tokenStates.push(isValidToken);
+      if (!isValidToken)
+        isFieldValid = false;
+      taggedToken = taggedTokenRegex.exec(html);
+    }
+    if (isFieldValid !== this.props.isValid)
+      this.props.onValidationChange(isFieldValid);
+    this.setState({ tokenStates });
+  }
+
   createToken(title) {
-    console.log("Create a token with title", title);
+    this.props.onCreateToken(title);
+  }
+
+  updateQueryData(html) {
+    // Reformat phrase to follow database syntax
+    // (e.g. braces, double dot, spacing)
+    html = html
+      .replace(/<u[^>]*>/g, "[")
+      .replace(/<\/u>/g, "]")
+      .replace(/&nbsp;/g, " ")
+      .replace(/<\/?span[^>]*>/g, "");
+    let dotInToken = /(?<!\.)\.(?!\.)[^.[\]]*\]/g;
+    let match = dotInToken.exec(html);
+    while (match) {
+      html = html.slice(0, match.index) + "." + html.slice(match.index);
+      match = dotInToken.exec(html);
+    }
+    this.props.onChange(html);
   }
 
   handleTextInput = (e) => {
-    let val = this.formatHTML(e.target.value);
-    this.setState({ html: val });
-    this.updateAutocomplete();
-    // Reformat phrase to meet database standards
-    // (e.g. braces, double dot, spacing)
-    val = val
-      .replace(/<u>/g, "[")
-      .replace(/<\/u>/g, "]")
-      .replace(/&nbsp;/g, " ");
-    let dotInToken = /(?<!\.)\.(?!\.)[^\.\[\]]*\]/g;
-    let match = dotInToken.exec(val);
-    while (match) {
-      val = val.slice(0, match.index) + "." + val.slice(match.index);
-      match = dotInToken.exec(val);
-    }
-    this.props.onChange(val);
+    let newHTML = this.formatHTML(e.target.value);
+    this.updateTokenColor(newHTML);
+    const selectedToken = this.getSelectedToken();
+    this.updateAutocomplete(selectedToken);
+    this.setState({ html: newHTML });
+    this.updateQueryData(newHTML);
   };
 
   render() {
@@ -157,9 +191,20 @@ export default class ValidatorField extends Component {
       background: "var(--accent)",
       transform: "scaleX(1.4) translateX(-2px)",
     };
+    const tokenStyles = this.state.tokenStates.map((isValid, i) => {
+      return `
+      .text-field > u:nth-of-type(${i + 1}) {
+        background: ${isValid ? "var(--accent)": "var(--invalid)"};
+      }
+      `
+    }).join("\n");
+
+    const parentStyles = css`
+      ${tokenStyles}
+    `
 
     return (
-      <div className="ValidatorField">
+      <div className="ValidatorField" css={parentStyles}>
         <div
           className="block"
           style={this.state.isFocused ? focusedBlock : null}
@@ -167,7 +212,7 @@ export default class ValidatorField extends Component {
         <h3 className="field-title">{this.props.title}</h3>
         <ContentEditable
           onBlur={this.toggleFocus.bind(this)}
-          onClick={this.updateAutocomplete.bind(this)}
+          onClick={() => this.updateAutocomplete(this.getSelectedToken())}
           onFocus={this.toggleFocus.bind(this)}
           onKeyDown={this.toggleToken.bind(this)}
           className="text-field"
@@ -177,7 +222,7 @@ export default class ValidatorField extends Component {
           disabled={false} // use true to disable editing
         />
         {this.state.showAutocomplete && (
-          <AutocompleteList
+          <AutocompleteList   
             entities={this.props.entities}
             entityName={this.getEntityFromToken(this.state.tokenVal)}
             inputVal={this.state.tokenVal}

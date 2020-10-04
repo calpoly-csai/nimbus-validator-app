@@ -8,7 +8,6 @@ export default function AllValidated() {
     height: "auto",
   };
 
-  let signOut = () => console.log("sign out");
   return (
     <div className="AllValidated">
       <FinishedHiro style={hiroStyles} />
