@@ -93,7 +93,6 @@ export default function Validator(props) {
         onDelete={deleteCurrentQuery}
         onSubmit={getNextQuery}
       />
-      <TokenBar />
       <ValidatorQueryNav
         queries={queries}
         selectedIndex={selectedIndex}
