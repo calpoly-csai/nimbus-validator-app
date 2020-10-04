@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Validator.scss";
 import ValidatorForm from "./ValidatorForm";
-import TokenBar from "./TokenBar";
 import ValidatorQueryNav from "./ValidatorQueryNav";
 import AllValidated from "./AllValidated";
 import axios from "axios";
@@ -45,7 +44,7 @@ export default function Validator(props) {
       answer: submittedQuery.answer.replace(regex, "").replace(nonSpacedToken, " "),
       verified: true,
     };
-    let response = await axios.post(`/new_data/update_phrase`, data);
+    await axios.post(`/new_data/update_phrase`, data);
 
     if (updatedQueries.length - 2 <= selectedIndex)
       await fetchMoreQueries(1, updatedQueries);
@@ -81,7 +80,13 @@ export default function Validator(props) {
   };
   useEffect(() => {
     fetchMoreQueries(3, queries);
+    /** DO NOT REMOVE THE COMMENT BELOW! It prevents an error from being raised 
+     * that is caused by the empty dependency array in useEffect here. 
+     * https://stackoverflow.com/questions/55840294/how-to-fix-missing-dependency-warning-when-using-useeffect-react-hook
+     */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   // TODO: Build a loading page while queries are initially fetched
   if (!queries.length) return <AllValidated />;
 

@@ -7,7 +7,7 @@ export default function ValidatorToggle({
   onChange,
 }) {
   let optionEls = options.map((option) => (
-    <button className="option" onClick={() => onChange(option)} key={option}>
+    <button className="option" onClick={() => onChange(option)} key={option} style={option === value ? {color:"var(--text)"}: {color: "white"}}>
       {option}
     </button>
   ));

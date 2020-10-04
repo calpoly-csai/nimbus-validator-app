@@ -2,7 +2,6 @@
 
 import React, { Component } from "react";
 import { css, jsx } from '@emotion/core'
-import Token from "./Token";
 import ContentEditable from "react-contenteditable";
 import AutocompleteList from "./AutocompleteList";
 export default class ValidatorField extends Component {
@@ -158,7 +157,7 @@ export default class ValidatorField extends Component {
   }
 
   createToken(title) {
-    console.log("Create a token with title", title);
+    this.props.onCreateToken(title);
   }
 
   updateQueryData(html) {
@@ -169,7 +168,7 @@ export default class ValidatorField extends Component {
       .replace(/<\/u>/g, "]")
       .replace(/&nbsp;/g, " ")
       .replace(/<\/?span[^>]*>/g, "");
-    let dotInToken = /(?<!\.)\.(?!\.)[^\.\[\]]*\]/g;
+    let dotInToken = /(?<!\.)\.(?!\.)[^.[\]]*\]/g;
     let match = dotInToken.exec(html);
     while (match) {
       html = html.slice(0, match.index) + "." + html.slice(match.index);

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ValidatorField from "./ValidatorField";
 import ValidatorToggle from "./ValidatorToggle";
 import ValidatorSelector from "./ValidatorSelector";
+import TokenCreator from "./TokenCreator";
 import axios from 'axios';
 
 export default function ValidatorForm({ query, onDelete, onSubmit }) {
@@ -11,6 +12,7 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
   // This makes the assumption that the fetched phrases are valid
   let [questionValid, setQuestionValid] = useState(true);
   let [answerValid, setAnswerValid] = useState(true);
+  let [creatingToken, setCreatingToken] = useState(false);
   let [isAnswerable, setAnswerable] = useState(
     query.isAnswerable ? "Yes" : "No"
   );
@@ -38,6 +40,11 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
   };
   useEffect(updateQueryState, [query]);
 
+  /**Creates a token to be added to the server */
+  let createToken = () => {
+    setCreatingToken(true)
+  }
+  
   /**Uploads query payload when the updated query is valid */
   let uploadValidatedQuery = () => {
     let shouldSubmit = [question, answer, isAnswerable, questionType].every(
@@ -72,6 +79,7 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
         queryId={query.id}
         entities={entities}
         onValidationChange={setQuestionValid}
+        onCreateToken={createToken}
       />
       <ValidatorField
         title="Answer"
@@ -80,6 +88,7 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
         queryId={query.id}
         entities={entities}
         onValidationChange={setAnswerValid}
+        onCreateToken={createToken}
       />
       <div className="query-properties">
         <ValidatorToggle
@@ -107,6 +116,7 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
           Delete
         </button>
       </div>
+     {creatingToken && <TokenCreator onDismiss={() => setCreatingToken(false)}/>}
     </form>
   );
 }
