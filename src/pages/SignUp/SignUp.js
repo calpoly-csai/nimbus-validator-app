@@ -1,17 +1,35 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef } from "react";
+import { Link, useHistory } from "react-router-dom";
 import TextField from "../../components/TextField/TextField";
 import LoginHero from "../../components/LoginHero/LoginHero";
 import "./SignUp.scss";
-import { auth } from "../../firebase";
 import { isEmail } from "../../modules/validators";
-import cpcsaiLogo from '../../assets/cpcsai_blackfull.png';
+import cpcsaiLogo from "../../assets/cpcsai_blackfull.png";
+import axios from "axios";
+
+const shakeElement = (el) =>
+  el.animate(
+    {
+      transform: [
+        "translateX(0)",
+        "translateX(20px)",
+        "translateX(0)",
+        "translateX(-20px)",
+        "translateX(0)",
+      ],
+    },
+    { duration: 500, easing: "ease-in-out" }
+  );
 
 export default function SignUp(props) {
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let [confirmPassword, setConfirmPassword] = useState("");
   let [entryCode, setEntryCode] = useState("");
+
+  const history = useHistory();
+
+  const entryField = useRef(null);
 
   const formIsValid = () =>
     [email, password, confirmPassword, entryCode].every(Boolean) &&
@@ -22,10 +40,15 @@ export default function SignUp(props) {
     e.preventDefault();
     if (formIsValid()) {
       try {
-        await auth.createUserWithEmailAndPassword(email, password);
+        await axios.post(
+          "https://us-central1-csai-b408c.cloudfunctions.net/signUpWithCode",
+          { email, password, code: entryCode }
+        );
       } catch (err) {
-        console.error(err.message);
+        if (entryField.current) shakeElement(entryField.current);
+        return console.error(err.message);
       }
+      history.push("/login");
     } else {
       alert("Please enter a valid email and password.");
     }
@@ -35,7 +58,7 @@ export default function SignUp(props) {
     <div className="SignUp">
       <div className="account-container">
         <Link to="/login">
-          <img className="cpcsaiLogo" src={cpcsaiLogo} alt="cpcsaiLogo"/>
+          <img className="cpcsaiLogo" src={cpcsaiLogo} alt="cpcsaiLogo" />
         </Link>
         <div className="account-title">
           <h2>Sign Up</h2>
@@ -64,6 +87,7 @@ export default function SignUp(props) {
           />
           <TextField
             type="password"
+            ref={entryField}
             placeholder="Entry Code"
             onChange={setEntryCode}
             value={entryCode}
