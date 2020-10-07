@@ -6,7 +6,7 @@ A web app that allows CSAI club members to review and quality control phrase dat
 This app exists to clean data crowd sourced by the [CSAI Recorder](https://www.csai.app/) (check it out [on Github](https://github.com/calpoly-csai/csai-recorder)). Once cleaned, the data is made available to the live Nimbus model (interact with Nimbus at [Nimbus Chat](https://nimbus.calpolycsai.com/)). Specifically, `QuestionAnswerPairs` are fetched from the club's SQL database via the [Nimbus API](https://github.com/calpoly-csai/api), edited by the user, and the revisions are sent back to the database.<br />
 **Note:** You must create an account to validate data. Reach out to anyone on the CSAI team for the entry code to create an account. This ensures that only club members are allowed to validate data.
 
-![demo gif](https://media.giphy.com/media/SX171AZcWmm7DiyT83/giphy.gif)
+![demo gif](https://media.giphy.com/media/6Zc3pEySruneZ6XY4I/giphy.gif)
 
 ## Develop Locally
 
