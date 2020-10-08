@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./TextField.scss";
-export default function TextField(props) {
+export default React.forwardRef((props, ref) => {
   let [isValid, setValid] = useState(true);
   let labelStyle;
   let errorStyle;
@@ -23,13 +23,16 @@ export default function TextField(props) {
     errorStyle = { borderBottom: "2px solid var(--deny)" };
   }
   return (
-    <div className="TextField">
+    <div className="TextField" ref={ref}>
       <p className="label" style={labelStyle}>
         {props.placeholder}
       </p>
       <div className="field-container">
-        <ion-icon name={props.icon} className="icon" style={{fontSize: "40px"}}>
-        </ion-icon>
+        <ion-icon
+          name={props.icon}
+          className="icon"
+          style={{ fontSize: "40px" }}
+        ></ion-icon>
         <input
           type={props.type}
           placeholder={props.placeholder}
@@ -42,4 +45,4 @@ export default function TextField(props) {
       </div>
     </div>
   );
-}
+});
