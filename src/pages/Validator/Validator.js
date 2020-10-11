@@ -12,7 +12,7 @@ export default function Validator(props) {
 
   let deleteCurrentQuery = async () => {
     let updatedQueries = [...queries];
-    let data = updatedQueries.splice(selectedIndex, 1);
+    let data = updatedQueries.splice(selectedIndex, 1)[0];
 
     // delete query in database
     axios.post(`/new_data/delete_phrase`, data);
