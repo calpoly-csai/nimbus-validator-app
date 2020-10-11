@@ -65,8 +65,8 @@ export default function ValidatorForm({ query, onDelete, onSubmit }) {
   let deleteQuery = () => {
     onDelete();
     console.log(
-      "This will delete the currently selected query in server as well:",
-      query.id
+      "This will delete the currently selected query (ID =", query.id, 
+      ") in server as well"
     );
   };
 
