@@ -12,10 +12,10 @@ export default function Validator(props) {
 
   let deleteCurrentQuery = async () => {
     let updatedQueries = [...queries];
-    updatedQueries.splice(selectedIndex, 1);
+    let data = updatedQueries.splice(selectedIndex, 1)[0];
 
     // delete query in database
-    axios.post(`/new_data/delete_phrase`);
+    axios.post(`/new_data/delete_phrase`, data);
 
     // If we have fallen below 2 queries remaining, fetch 3 more.
     if (updatedQueries.length < 2) await fetchMoreQueries(3, updatedQueries);
