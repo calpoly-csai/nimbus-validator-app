@@ -33,17 +33,24 @@ export default function Validator(props) {
 
     // regex to remove anything between HTML entities (potential HTML elements)
     let regex = /&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});.*&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});/gi;
-    const nonSpacedToken = /((?<=(\w))(?=(\[)))|((?<=(\]))(?=(\w)))/g
+    // Ensures that all tokens have spaces between their dividers and the words following or preceding.
+    const nonSpacedToken = /((?<=(\w))(?=(\[)))|((?<=(\]))(?=(\w)))/g 
+    // Takes out non breaking space that allows users to edit before tokens that start off the textbox.
+    const firstTokenSpacer = /^&nbsp;/g 
+    const formatString = str => {
+      return str.replace(firstTokenSpacer, "").replace(regex, "").replace(nonSpacedToken, " ").trim()
+    }
 
     // update query in the database
     let data = {
       id: submittedQuery.id,
       isAnswerable: submittedQuery.isAnswerable === "No" ? false : true,
       type: submittedQuery.type,
-      question: submittedQuery.question.replace(regex, "").replace(nonSpacedToken, " "),
-      answer: submittedQuery.answer.replace(regex, "").replace(nonSpacedToken, " "),
+      question: formatString(submittedQuery.question),
+      answer: formatString(submittedQuery.answer),
       verified: true,
     };
+    
     await axios.post(`/new_data/update_phrase`, data);
 
     if (updatedQueries.length - 2 <= selectedIndex)
@@ -64,9 +71,11 @@ export default function Validator(props) {
     // TODO: get the actual server address
     let response = await axios.get(`/data/get_phrase/${count}`);
     response = response.data.data.map((query) => {
+      const question = (query.question_format[0] === "[" ? "&nbsp;"  : "") + query.question_format
+      const answer = (query.answer_format[0] === "[" ? "&nbsp;"  : "") + query.answer_format
       return {
-        question: query.question_format,
-        answer: query.answer_format,
+        question,
+        answer,
         type: query.answer_type,
         isAnswerable: query.can_we_answer,
         id: query.id,
