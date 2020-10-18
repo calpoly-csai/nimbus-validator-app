@@ -3,12 +3,46 @@ import "./Validator.scss";
 import ValidatorForm from "./ValidatorForm";
 import ValidatorQueryNav from "./ValidatorQueryNav";
 import AllValidated from "./AllValidated";
+import NotificationStack from "../../components/NotificationStack/NotificationStack";
 import axios from "axios";
 
 export default function Validator(props) {
   let maxQueryQueueSize = 10;
   let [queries, setQueries] = useState([]);
   let [selectedIndex, setSelectedIndex] = useState(0);
+  let [notifications, setNotifications] = useState([])
+
+  let handleNotificationExpiration = (id) => {
+    let index = notifications.findIndex(n => n.timestamp === id)
+    if(index === -1) return
+    console.log("Notification handled")
+    const newNotifications = [...notifications]
+    newNotifications.splice(index,1);
+    
+    setNotifications(newNotifications);
+  }
+
+  let addNotification = () => {
+    let options = [
+      {timestamp: Date.now(),
+        title: "N1",
+      message: "M1",
+    color: "red"},
+    {timestamp: Date.now(),
+      title: "N2",
+    message: "M2",
+  color: "green"},
+  {timestamp: Date.now(),
+    title: "N3",
+  message: "M3",
+color: "blue"}
+    ]
+    const newNotifications = [...notifications]
+    const chooseRandom = (arr) => arr[Math.floor(Math.random() * (arr.length - 1))]
+    newNotifications.push(chooseRandom(options))
+  setNotifications(newNotifications);
+  }
+
 
   let deleteCurrentQuery = async () => {
     let updatedQueries = [...queries];
@@ -112,6 +146,8 @@ export default function Validator(props) {
         selectedIndex={selectedIndex}
         onChange={setSelectedIndex}
       />
+      <NotificationStack notifications={notifications} onNotificationExpired={handleNotificationExpiration}/>
+      <button onClick={addNotification} style={{position: "fixed", bottom: "20px", right: "20px", padding: "10px 15px"}}>Notify</button>
     </div>
   );
 }
