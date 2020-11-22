@@ -14,10 +14,10 @@ export default function Validator(props) {
 
   let handleNotificationExpiration = (id) => {
     let index = notifications.findIndex(n => n.timestamp === id)
-    if(index === -1) return
-    console.log("Notification handled")
+    if (index === -1) return;
+    console.log("Notification handled");
     const newNotifications = [...notifications]
-    newNotifications.splice(index,1);
+    newNotifications.splice(index,1); // Pop from the end of the queue, which is the front of the array
     
     setNotifications(newNotifications);
   }
@@ -25,21 +25,21 @@ export default function Validator(props) {
   let addNotification = () => {
     let options = [
       {timestamp: Date.now(),
-        title: "N1",
-      message: "M1",
-    color: "red"},
+        title: "Message sent",
+      message: "The server recieved your update",
+    color: "green"},
     {timestamp: Date.now(),
-      title: "N2",
-    message: "M2",
-  color: "green"},
+      title: "Something went wrong",
+    message: "Please ask someone who knows about this stuff, cuz I don't",
+  color: "red"},
   {timestamp: Date.now(),
-    title: "N3",
-  message: "M3",
+    title: "Message deleted",
+  message: "Message was deleted on the server successfully",
 color: "blue"}
     ]
-    const newNotifications = [...notifications]
     const chooseRandom = (arr) => arr[Math.floor(Math.random() * (arr.length - 1))]
-    newNotifications.push(chooseRandom(options))
+    const newNotifications = [...notifications, chooseRandom(options)]
+
   setNotifications(newNotifications);
   }
 

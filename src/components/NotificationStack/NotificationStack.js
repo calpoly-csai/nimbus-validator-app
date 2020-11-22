@@ -3,9 +3,9 @@ import "./NotificationStack.scss"
 var CSSTransitionGroup = require('react-transition-group/CSSTransitionGroup');
 
 
-function NotificationCard({color, title, message}) {
-    const cardStyles = {backgroundColor:color}
-    return <div className="NotificationCard" style={cardStyles}>
+function NotificationCard({color, title, message, timestamp, onClick}) {
+    const cardStyles = {borderColor:color}
+    return <div className="NotificationCard" style={cardStyles} onClick={onClick}>
             <h3>{title}</h3>
             <p>{message}</p>
           </div>
@@ -14,9 +14,11 @@ function NotificationCard({color, title, message}) {
 
 export default function NotificationStack({onNotificationExpired, notifications}) {
     const [notificationTimeouts, setNotificationTimeouts] = useState([{timestamp: Date.now()}])
+
     useEffect(() => {
+        notificationTimeouts.forEach(to => clearTimeout(to))
         const timeouts = []
-        const duration = 3000
+        const duration = 10000;
         notifications.forEach(notification => {
            let to = setTimeout(() => {
                console.log(notification.timestamp + " finished")
@@ -26,14 +28,19 @@ export default function NotificationStack({onNotificationExpired, notifications}
         })
         setNotificationTimeouts(timeouts)
         
-        return () => notificationTimeouts.forEach(to => clearTimeout(to))
     }, [notifications])
+
+    // function handleClickDismissal(timestamp) {
+    //     onNotificationExpired(timestamp);
+    //     let newTimeouts = [...notificationTimeouts]
+        
+    // }
 
     return  <div className="NotificationStack">
         <CSSTransitionGroup
     transitionName="example"
     >
-        {notifications.map(notification => <NotificationCard {...notification}/>)}
+        {notifications.map(notification => <NotificationCard {...notification} key={notification.timestamp} onClick={() => onNotificationExpired(notification.timestamp)}/>)}
     </CSSTransitionGroup>
     </div>
 
